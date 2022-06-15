@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <mariadb/mysql.h>
 
 GtkWidget *win = NULL;
 GtkWidget *textbox=NULL;
@@ -7,11 +8,28 @@ GtkEntry *password=NULL;
 
 void connetti() {
     gchar *user=gtk_entry_get_text(textbox), *passwd=gtk_entry_get_text(password);
+    MYSQL *conn=NULL;
     if (strlen(user)>0 && strlen(passwd)>0) {
-        GtkDialog *d=gtk_message_dialog_new(win, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Effettuo la connessione");
-        gtk_dialog_run(d);
-        gtk_widget_destroy(d);
-        gtk_window_close(win);
+        conn=mysql_init(NULL);
+        if (conn==NULL) {
+            GtkDialog *d=gtk_message_dialog_new(win, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Impossibile effettuare l'init del database");
+            gtk_dialog_run(d);
+            gtk_widget_destroy(d);
+        }
+        else {
+            if ( (mysql_real_connect(conn,"127.0.0.1",user,passwd,"",0,NULL,0))== NULL) {
+                GtkDialog *d=gtk_message_dialog_new(win, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Impossibile effettuare la connnessione");
+                gtk_dialog_run(d);
+                gtk_widget_destroy(d);
+            }
+            else {
+                GtkDialog *d=gtk_message_dialog_new(win, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Connessione effettuata");
+                gtk_dialog_run(d);
+                gtk_widget_destroy(d);
+                    gtk_window_close(win);
+            }
+        }
+
     } else {
         if (strlen(user)==0) {
             GtkDialog *d=gtk_message_dialog_new(win, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo user name non può essere NULL");
