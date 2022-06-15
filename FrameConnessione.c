@@ -4,13 +4,13 @@
 GtkWidget *win = NULL;
 GtkWidget *textbox=NULL;
 GtkWidget *password=NULL;
+GtkWidget *ip=NULL;
 
 extern MYSQL *conn;
 
 void connetti() {
-    gchar *user=gtk_entry_get_text(GTK_ENTRY(textbox)), *passwd=gtk_entry_get_text(GTK_ENTRY(password));
     GtkWidget *d;
-    if (gtk_entry_get_text_length(GTK_ENTRY(textbox))>0 && gtk_entry_get_text_length(GTK_ENTRY(password))>0) {
+    if (gtk_entry_get_text_length(GTK_ENTRY(textbox))>0 && gtk_entry_get_text_length(GTK_ENTRY(password))>0 && gtk_entry_get_text_length(GTK_ENTRY(ip))>0) {
         conn=mysql_init(NULL);
         if (conn==NULL) {
             d=gtk_message_dialog_new(GTK_WINDOW(win), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Impossibile effettuare l'init del database");
@@ -18,7 +18,7 @@ void connetti() {
             gtk_widget_destroy(d);
         }
         else {
-            if ( (mysql_real_connect(conn,"127.0.0.1",user,passwd,"",0,NULL,0))== NULL) {
+            if ( (mysql_real_connect(conn,gtk_entry_get_text(GTK_ENTRY(ip)),gtk_entry_get_text(GTK_ENTRY(textbox)),gtk_entry_get_text(GTK_ENTRY(password)),"",0,NULL,0))== NULL) {
                 d=gtk_message_dialog_new(GTK_WINDOW(win), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Impossibile effettuare la connnessione");
                 gtk_dialog_run(GTK_DIALOG(d));
                 gtk_widget_destroy(d);
@@ -35,6 +35,10 @@ void connetti() {
     } else {
         if (gtk_entry_get_text_length(GTK_ENTRY(textbox))==0) {
             d=gtk_message_dialog_new(GTK_WINDOW(win), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo user name non può essere NULL");
+            gtk_dialog_run(GTK_DIALOG(d));
+            gtk_widget_destroy(d);
+        } else if (gtk_entry_get_text_length(GTK_ENTRY(ip))==0){
+            d=gtk_message_dialog_new(GTK_WINDOW(win), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo IP del server non può essere NULL");
             gtk_dialog_run(GTK_DIALOG(d));
             gtk_widget_destroy(d);
         } else {
@@ -58,6 +62,13 @@ void creaFrameConnessione() {
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (win), vbox);
 
+  hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+  label=gtk_label_new("IP del server: ");
+  gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0)  ;
+  ip=gtk_entry_new();
+  gtk_entry_set_text(ip, "127.0.0.1");
+  gtk_box_pack_start(GTK_BOX(hbox), ip, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
   hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
   label=gtk_label_new("User name :");
   gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
