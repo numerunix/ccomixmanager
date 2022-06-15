@@ -3,10 +3,11 @@
 #include "articolo.h"
 static void helloWorld (GtkWidget *wid, GtkWidget *win)
 {
-  GtkWidget *dialog = NULL;
-
-  dialog = gtk_message_dialog_new (GTK_WINDOW (win), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Hello World!");
-  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
+  gchar **lista_autori=calloc(1, sizeof(gchar*));
+  lista_autori[0]="Giulio Sorrentino";
+  GtkWidget *dialog = gtk_about_dialog_new();
+  gtk_about_dialog_set_authors(dialog, lista_autori);
+  gtk_about_dialog_set_copyright(dialog, "Il seguente programma è coperto da GPL v3 o, secondo la tua opionione, qualsiasi versione successiva.");
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
 }
@@ -38,7 +39,6 @@ int main (int argc, char *argv[])
 
   g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (helloWorld), (gpointer) win);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
- articolo *a=CreaArticolo(1, "prova", "prova", 1, "prova", 1, 1, 1, 1, 1, "20");
   button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
   g_signal_connect (button, "clicked", gtk_main_quit, NULL);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);

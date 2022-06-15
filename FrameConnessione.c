@@ -1,17 +1,44 @@
 #include <gtk/gtk.h>
 
+GtkWidget *win = NULL;
+GtkWidget *textbox=NULL;
+GtkEntry *password=NULL;
+
+
 void connetti() {
-    GtkDialog *d=gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Ciao mondo");
-    gtk_dialog_run(d);
-    gtk_widget_destroy(d);
+    gchar *user=gtk_entry_get_text(textbox), *passwd=gtk_entry_get_text(password);
+    if (strlen(user)>0 && strlen(passwd)>0) {
+        GtkDialog *d=gtk_message_dialog_new(win, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Effettuo la connessione");
+        gtk_dialog_run(d);
+        gtk_widget_destroy(d);
+        gtk_window_close(win);
+    } else {
+        if (strlen(user)==0) {
+            GtkDialog *d=gtk_message_dialog_new(win, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo user name non può essere NULL");
+            gtk_dialog_run(d);
+            gtk_widget_destroy(d);
+        } else {
+            GtkDialog *d=gtk_message_dialog_new(win, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo password non può essere NULL");
+            gtk_dialog_run(d);
+            gtk_widget_destroy(d);
+        }
+    }
+
+ /*   if (g_list_length(l)==0) {
+        GtkDialog *d=gtk_message_dialog_new(win, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo password non può essere null");
+        gtk_dialog_run(d);
+        gtk_widget_destroy(d);
+        return;
+    } else {
+        b==gtk_text_view_get_buffer(textbox);
+        gtk_text_buffer_get_bounds(b, inizio, fine);
+        pwd=gtk_text_buffer_get_text(b, inizio, fine, TRUE);
+    }*/
 }
 
 
 void creaFrameConnessione() {
   GtkWidget *button = NULL;
-  GtkWidget *win = NULL;
-  GtkWidget *textbox=NULL;
-  GtkEntry *password=NULL;
   GtkWidget *vbox = NULL;
   GtkWidget *hbox= NULL;
   GtkWidget *label=NULL;
@@ -20,16 +47,13 @@ void creaFrameConnessione() {
   gtk_window_set_title (GTK_WINDOW (win), "Frame Connessione");
   gtk_window_set_position (GTK_WINDOW (win), GTK_WIN_POS_CENTER);
   gtk_widget_realize (win);
-  g_signal_connect (win, "destroy", gtk_main_quit, NULL);
-
-  /* Create a vertical box with buttons */
   vbox = gtk_vbox_new (TRUE, 6);
   gtk_container_add (GTK_CONTAINER (win), vbox);
 
   hbox=gtk_hbox_new(TRUE, 6);
   label=gtk_label_new("User name :");
   gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
-  textbox=gtk_text_view_new();
+  textbox=gtk_entry_new();
   gtk_box_pack_start(GTK_BOX(hbox), textbox, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
   hbox=gtk_hbox_new(TRUE, 6);
