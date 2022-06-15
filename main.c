@@ -45,6 +45,7 @@ int main (int argc, char *argv[])
 
   /* Enter the main loop */
   gtk_widget_show_all (win);
+  creaFrameConnessione();
   gtk_main ();
   return 0;
 }
