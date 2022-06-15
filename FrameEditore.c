@@ -11,6 +11,7 @@ extern editore *CreaEditore(unsigned long id, char *nome, unsigned long sconto, 
 extern char *getNomeEditore(editore *e);
 void salva() {
     unsigned long lid=0L, lsconto=0L;
+    unsigned int result;
     GtkWidget *d=NULL;
     char *strnome=NULL;
     char *strnote=NULL;
@@ -27,7 +28,9 @@ void salva() {
         strnome=gtk_entry_get_text(GTK_ENTRY(nome));
         strnote=gtk_entry_get_text(GTK_ENTRY(note));
         e=CreaEditore(lid, strnome, lsconto, strnote);
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Ho creato l'editore con nome %s", getNomeEditore(e));
+        result=editoreDAO(e);
+        free(e);
+        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", result);
         gtk_dialog_run(GTK_DIALOG(d));
         gtk_widget_destroy(d);
     }

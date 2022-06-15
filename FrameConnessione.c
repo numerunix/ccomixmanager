@@ -5,10 +5,10 @@ GtkWidget *win = NULL;
 GtkWidget *textbox=NULL;
 GtkWidget *password=NULL;
 
+extern MYSQL *conn;
 
 void connetti() {
     gchar *user=gtk_entry_get_text(GTK_ENTRY(textbox)), *passwd=gtk_entry_get_text(GTK_ENTRY(password));
-    MYSQL *conn=NULL;
     GtkWidget *d;
     if (gtk_entry_get_text_length(GTK_ENTRY(textbox))>0 && gtk_entry_get_text_length(GTK_ENTRY(password))>0) {
         conn=mysql_init(NULL);
@@ -24,6 +24,7 @@ void connetti() {
                 gtk_widget_destroy(d);
             }
             else {
+                mysql_select_db(conn, "ComixManager");
                 d=gtk_message_dialog_new(GTK_WINDOW(win), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Connessione effettuata");
                 gtk_dialog_run(GTK_DIALOG(d));
                 gtk_widget_destroy(d);
