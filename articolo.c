@@ -61,6 +61,6 @@ unsigned int getNumeroArticolo(articolo *a) {
     return a->numero;
 }
 
-time_t *getDataPubblicazioneArticolo(articolo *a) {
+time_t getDataPubblicazioneArticolo(articolo *a) {
     return a->dataPubblicazione;
 }

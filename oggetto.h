@@ -3,7 +3,7 @@
 
 
 #include <malloc.h>
-#include <time.h>-
+#include <time.h>
 
 typedef struct oggetto {
     unsigned long idOggetto, quantita, idDipendente, idNegozio, idArticolo;

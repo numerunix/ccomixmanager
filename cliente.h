@@ -3,6 +3,7 @@
 
 #include <time.h>
 #include <malloc.h>
+#include <string.h>
 
 typedef struct cliente {
     unsigned long int idCliente, idCasella;

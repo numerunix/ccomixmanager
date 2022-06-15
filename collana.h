@@ -6,7 +6,7 @@
 
 typedef struct collana {
 	unsigned long idCollana, idEditore;
-	char * nome, note;
+	char * nome, *note;
 } collana;
 
 #endif // COLLANA_H_INCLUDED

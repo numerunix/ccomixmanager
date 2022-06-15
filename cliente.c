@@ -42,6 +42,7 @@
 
 		c->idCasella=casella;
 		c->sconto=sconto;
+		return c;
 	}
 
 	unsigned long getIdCliente(cliente *c) {
@@ -115,7 +116,7 @@
             return c->dataInizioTesseramento;
 
     }
-	char *getDataFineTesseramentoCliente(cliente *c) {
+	time_t getDataFineTesseramentoCliente(cliente *c) {
 		return c->dataFineTesseramento;
 
 	}
