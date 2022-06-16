@@ -1,7 +1,7 @@
 #include "editore.h"
 
 
-editore *CreaEditore(unsigned long id, char *nome, unsigned long sconto, char *note) {
+const editore *CreaEditore(unsigned long id, const char *nome, unsigned long sconto, const char *note) {
     editore *e=malloc(sizeof(editore));
     e->id=id;
 	e->nome=calloc(strlen(nome), sizeof(char));
@@ -12,24 +12,24 @@ editore *CreaEditore(unsigned long id, char *nome, unsigned long sconto, char *n
     return e;
 }
 
-unsigned long getIdEditore( editore *e) {
+unsigned long getIdEditore(const editore *e) {
 	return e->id;
 }
 
-unsigned long getScontoEditore( editore *e) {
+unsigned long getScontoEditore(const editore *e) {
 	return e->sconto;
 }
 
-char *getNomeEditore(editore *e) {
+const char *getNomeEditore(const editore *e) {
 	return e->nome;
 }
 
 
-char *getNoteEditore(editore *e) {
+const char *getNoteEditore(const editore *e) {
 	return e->note;
 }
 
-void deallocaEditore(editore *e)  {
+void deallocaEditore(const editore *e)  {
     free(e->nome);
     free(e->note);
     free(e);

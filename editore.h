@@ -6,13 +6,13 @@
 
 typedef struct editore {
 	unsigned long id, sconto;
-	char *nome, *note;
+	const char *nome, *note;
 } editore;
 
-editore *CreaEditore(unsigned long id, char *nome, unsigned long sconto, char *note);
-unsigned long getIdEditore( editore *e);
-unsigned long getScontoEditore( editore *e);
-char *getNomeEditore(editore *e);
-char *getNoteEditore(editore *e);
-void deallocaEditore(editore *e);
+const editore *CreaEditore(unsigned long id, const char *nome, unsigned long sconto, const char *note);
+unsigned long getIdEditore(const editore *e);
+unsigned long getScontoEditore(const editore *e);
+const char *getNomeEditore(const editore *e);
+const char *getNoteEditore(const editore *e);
+void deallocaEditore(const editore *e);
 #endif // EDITORE_H_INCLUDED

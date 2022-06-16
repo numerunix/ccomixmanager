@@ -1,81 +1,84 @@
 #include "fornitore.h"
 
-	fornitore *CreaFornitore(unsigned long id, char *nome, char *indirizzo, char *citta, char *provincia,  unsigned long telefono, unsigned long fax, char *email, char *sitoweb, char *note) {
-		fornitore *f=malloc(sizeof(fornitore));
-		f->idFornitore=id;
+const fornitore *CreaFornitore(unsigned long id, const char *nome, const char *indirizzo, const char *citta, const char *provincia,  const char *telefono, const char *fax, const char *email, const char *sitoweb, const char *note) {
+    fornitore *f=malloc(sizeof(fornitore));
+    f->idFornitore=id;
 
-		f->nome=calloc(strlen(nome), sizeof(char));
-        strncpy(f->nome, nome, strlen(nome));
+    f->nome=calloc(strlen(nome), sizeof(char));
+    strncpy(f->nome, nome, strlen(nome));
 
-        f->indirizzo=calloc(strlen(indirizzo), sizeof(char));
-        strncpy(f->indirizzo, indirizzo, strlen(indirizzo));
+    f->indirizzo=calloc(strlen(indirizzo), sizeof(char));
+    strncpy(f->indirizzo, indirizzo, strlen(indirizzo));
 
-        f->citta=calloc(strlen(citta), sizeof(char));
-        strncpy(f->citta, citta, strlen(citta));
+    f->citta=calloc(strlen(citta), sizeof(char));
+    strncpy(f->citta, citta, strlen(citta));
 
-        f->provincia=calloc(strlen(provincia), sizeof(char));
-        strncpy(f->provincia, provincia, strlen(provincia));
+    f->provincia=calloc(strlen(provincia), sizeof(char));
+    strncpy(f->provincia, provincia, strlen(provincia));
 
-		f->telefono=telefono;
-		f->fax=fax;
+    f->telefono=calloc(strlen(telefono), sizeof(char));
+    strncpy(f->telefono, telefono, strlen(telefono));
 
-        f->eMail=calloc(strlen(email), sizeof(char));
-        strncpy(f->eMail, email, strlen(email));
+    f->fax=calloc(strlen(fax), sizeof(char));
+    strncpy(f->fax, fax, strlen(fax));
 
-        f->sitoWeb=calloc(strlen(sitoweb), sizeof(char));
-        strncpy(f->sitoWeb, sitoweb, strlen(sitoweb));
-
-
-        f->note=calloc(strlen(note), sizeof(char));
-        strncpy(f->note, note, strlen(note));
-
-        return f;
-	}
-
-	unsigned long getIdFornitore(fornitore *f) {
-		return f->idFornitore;
-	}
-
-	char *getNomeFornitore(fornitore *f) {
-		return f->nome;
-	}
-
-	char *getIndirizzoFornitore(fornitore *f) {
-		return f->indirizzo;
-
-	}
-
-	char *getCittaFornitore(fornitore *f) {
-		return f->citta;
-
-	}
-
-	char *getprovinciaFornitore(fornitore *f) {
-		return f->provincia;
-
-	}
-
-	unsigned long getTelefonoFornitore(fornitore *f) {
-		return f->telefono;
-	}
+    f->eMail=calloc(strlen(email), sizeof(char));
+    strncpy(f->eMail, email, strlen(email));
 
 
-	unsigned long getFaxFornitore(fornitore *f) {
-		return f->fax;
-	}
+
+    f->sitoWeb=calloc(strlen(sitoweb), sizeof(char));
+    strncpy(f->sitoWeb, sitoweb, strlen(sitoweb));
 
 
-	char *geteMailFornitore(fornitore *f) {
-		return f->eMail;
+    f->note=calloc(strlen(note), sizeof(char));
+    strncpy(f->note, note, strlen(note));
 
-	}
+    return f;
+}
 
-    char *getSitoWebFornitore(fornitore *f) {
-        return f->sitoWeb;
+unsigned long getIdFornitore(const fornitore *f) {
+    return f->idFornitore;
+}
 
-	}
+const char *getNomeFornitore(const fornitore *f) {
+    return f->nome;
+}
 
-	    char *getNoteFornitore(fornitore *f) {
-        return f->note;
+const char *getIndirizzoFornitore(const fornitore *f) {
+    return f->indirizzo;
 
-	}
+}
+
+const char *getCittaFornitore(const fornitore *f) {
+    return f->citta;
+}
+
+const char *getprovinciaFornitore(const fornitore *f) {
+    return f->provincia;
+
+}
+
+const char *getTelefonoFornitore(const fornitore *f) {
+    return f->telefono;
+}
+
+
+const char *getFaxFornitore(const fornitore *f) {
+    return f->fax;
+}
+
+
+const char *geteMailFornitore(const fornitore *f) {
+    return f->eMail;
+}
+
+const char *getSitoWebFornitore(const fornitore *f) {
+    return f->sitoWeb;
+}
+
+const char *getNoteFornitore(const fornitore *f) {
+    return f->note;
+
+}
+

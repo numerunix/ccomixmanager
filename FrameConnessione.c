@@ -1,14 +1,14 @@
 #include <gtk/gtk.h>
 #include <mariadb/mysql.h>
 
-GtkWidget *win = NULL;
-GtkWidget *textbox=NULL;
-GtkWidget *password=NULL;
-GtkWidget *ip=NULL;
+static GtkWidget *win = NULL;
+static GtkWidget *textbox=NULL;
+static GtkWidget *password=NULL;
+static GtkWidget *ip=NULL;
 
 extern MYSQL *conn;
 
-void connetti() {
+static void connetti() {
     GtkWidget *d;
     if (gtk_entry_get_text_length(GTK_ENTRY(textbox))>0 && gtk_entry_get_text_length(GTK_ENTRY(password))>0 && gtk_entry_get_text_length(GTK_ENTRY(ip))>0) {
         conn=mysql_init(NULL);

@@ -6,6 +6,6 @@
 
 typedef struct Dipendente {
 	unsigned long idDipendente, idNegozio, cellulare;
-	char *nome, *cognome;
+	const char *nome, *cognome;
 } dipendente;
 #endif // DIPENDENTE_H_INCLUDED

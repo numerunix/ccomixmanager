@@ -1,6 +1,6 @@
 #include "dipendente.h"
 
-dipendente *CreaDipendente(unsigned long id, char *nome, char *cognome, unsigned long cellulare, unsigned long idnegozio)
+dipendente *CreaDipendente(unsigned long id, const char *nome, const char *cognome, unsigned long cellulare, unsigned long idnegozio)
 {
     dipendente *d=malloc(sizeof(dipendente));
 	d->idDipendente=id;
@@ -15,18 +15,18 @@ dipendente *CreaDipendente(unsigned long id, char *nome, char *cognome, unsigned
     return d;
 }
 
-char *getNomeDipedente(dipendente* d) {
+const char *getNomeDipedente(const dipendente* d) {
 	return d->nome;
 }
 
-char *getCognomeDipendente(dipendente *d) {
+const char *getCognomeDipendente(const dipendente *d) {
 	return d->cognome;
 }
 
-unsigned long getIdDipendente(dipendente *d) {
+unsigned long getIdDipendente(const dipendente *d) {
 	return d->idDipendente;
 }
 
-unsigned long getIdNegozioDipendente(dipendente *d) {
+unsigned long getIdNegozioDipendente(const dipendente *d) {
 	return d->idNegozio;
 }

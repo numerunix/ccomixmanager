@@ -1,4 +1,4 @@
-#include <gtk/gtk.h>
+/*#include <gtk/gtk.h>
 #include "editore.h"
 
 static GtkWindow *finestra=NULL;
@@ -40,7 +40,7 @@ static void salva() {
     }
 }
 
-void creaFrameEditore() {
+static void creaFrame() {
 
     GtkWidget *vbox=NULL;
     GtkWidget *hbox=NULL;
@@ -87,3 +87,4 @@ void creaFrameEditore() {
     gtk_window_set_modal(finestra, TRUE);
     gtk_widget_show_all(GTK_WIDGET(finestra));
 }
+*/
