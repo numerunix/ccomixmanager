@@ -4,12 +4,20 @@
 static GtkWindow *finestra=NULL;
 static GtkWidget *id=NULL;
 static GtkWidget *nome=NULL;
-static GtkWidget *sconto=NULL;
+static GtkWidget *indirizzo=NULL;
+static GtkWidget *citta=NULL;
+static GtkWidget *provincia=NULL;
+static GtkWidget *cap=NULL;
+static GtkWidget *email=NULL;
+static GtkWidget *sitoWeb=NULL;
 static GtkWidget *note=NULL;
+static GtkWidget *telefono=NULL;
+static GtkWidget *fax=NULL;
+
 
 static void salva() {
-    unsigned long lid=0L, lsconto=0L;
-    unsigned int result;
+    unsigned long lid=0L;
+    unsigned int result, icap;
     GtkWidget *d=NULL;
     char *strnome=NULL;
     char *strnote=NULL;
@@ -22,7 +30,7 @@ static void salva() {
                 gtk_widget_destroy(d);
                 return;
             }
-        sscanf(gtk_entry_get_text(GTK_ENTRY(sconto)),"%lu", &lsconto);
+        sscanf(gtk_entry_get_text(GTK_ENTRY(cap)),"%u", &icap);
         strnome=gtk_entry_get_text(GTK_ENTRY(nome));
         strnote=gtk_entry_get_text(GTK_ENTRY(note));
         //e=CreaEditore(lid, strnome, lsconto, strnote);
@@ -50,11 +58,11 @@ static void creaFrame() {
     gtk_container_set_border_width(GTK_CONTAINER(finestra), 8);
     gtk_window_set_title(GTK_WINDOW(finestra), "Inserimento Editore");
     gtk_window_set_position(GTK_WINDOW(finestra), GTK_WIN_POS_CENTER);
-    gtk_widget_realize(finestra);
+    gtk_widget_realize(GTK_WIDGET(finestra));
     vbox=gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
     gtk_container_add(GTK_CONTAINER(finestra), vbox);
     hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-    label=gtk_label_new("ID Editore: ");
+    label=gtk_label_new("ID Fornitore: ");
     gtk_box_pack_start(GTK_BOX(hbox), label, TRUE,TRUE, 0);
     id=gtk_entry_new();
     gtk_box_pack_start(GTK_BOX(hbox), id, TRUE, TRUE, 0);
@@ -66,16 +74,16 @@ static void creaFrame() {
     gtk_box_pack_start(GTK_BOX(hbox), nome, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
     hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-    label=gtk_label_new("Sconto: ");
+    label=gtk_label_new("Indirizzo: ");
     gtk_box_pack_start(GTK_BOX(hbox), label, TRUE,TRUE, 0);
-    sconto=gtk_entry_new();
-    gtk_box_pack_start(GTK_BOX(hbox), sconto, TRUE, TRUE, 0);
+    indirizzo=gtk_entry_new();
+    gtk_box_pack_start(GTK_BOX(hbox), indirizzo, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
     hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-    label=gtk_label_new("Note");
+    label=gtk_label_new("Città: ");
     gtk_box_pack_start(GTK_BOX(hbox), label, TRUE,TRUE, 0);
-    note=gtk_entry_new();
-    gtk_box_pack_start(GTK_BOX(hbox), note, TRUE, TRUE, 0);
+    citta=gtk_entry_new();
+    gtk_box_pack_start(GTK_BOX(hbox), citta, TRUE, TRUE, 0);
     hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
     bottone=gtk_button_new_with_label("Ok");
     g_signal_connect(bottone, "clicked", G_CALLBACK(salva), NULL);

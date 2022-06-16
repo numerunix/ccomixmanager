@@ -1,8 +1,8 @@
 #include "fornitore.h"
 
-const fornitore *CreaFornitore(unsigned long id, const char *nome, const char *indirizzo, const char *citta, const char *provincia,  const char *telefono, const char *fax, const char *email, const char *sitoweb, const char *note) {
+fornitore *CreaFornitore(unsigned long id, const char *nome, const char *indirizzo, const char *citta, const char *provincia,  const char *telefono, const char *fax, const char *email, const char *sitoweb, const char *note) {
     fornitore *f=malloc(sizeof(fornitore));
-    f->idFornitore=id;
+    f->id=id;
 
     f->nome=calloc(strlen(nome), sizeof(char));
     strncpy(f->nome, nome, strlen(nome));
@@ -37,3 +37,14 @@ const fornitore *CreaFornitore(unsigned long id, const char *nome, const char *i
     return f;
 }
 
+void dellocaFornitore(const fornitore *f) {
+    free(f->citta);
+    free(f->eMail);
+    free(f->fax);
+    free(f->indirizzo);
+    free(f->note);
+    free(f->provincia);
+    free(f->sitoWeb);
+    free(f->telefono);
+    free(f);
+}
