@@ -6,3 +6,6 @@ Per installarlo è necessario avere le librerie gtk e le librerie mariadb da apt
 E' necessario prendere il database dal mio progetto comixmanager su github e ripristinare il backup (https://github.com/numerunix/ComixManager/tree/master/Dump20190226).
 
 Attualmente sono pesenti solo 3 form di inserimento: editore, fornitore e negozio.
+
+# ATTENZIONE
+# TUTTE LE VERSIONE PRESENTI SU QUESTO SITO SONO STATE MODIFICATE DA FRANCESCO SORRENTINO. NON SCARICATELE FINO A QUANDO NON SONO RIUSCITO A RIPRISTINARLE.
