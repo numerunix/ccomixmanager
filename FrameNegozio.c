@@ -33,7 +33,7 @@ static void salvaNegozio() {
         strtelefono=gtk_entry_get_text(GTK_ENTRY(telefono));
         n=CreaNegozio(lid, strnome, strindirizzo, strcitta, strtelefono);
         result=negozioDAO(n);
-        //deallocaNegozio(n);
+        deallocaNegozio(n);
         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", result);
         gtk_dialog_run(GTK_DIALOG(d));
         gtk_widget_destroy(d);
