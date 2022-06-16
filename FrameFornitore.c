@@ -82,7 +82,7 @@ void creaFrameFornitore() {
     GtkWidget *bottone=NULL;
     finestra=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_container_set_border_width(GTK_CONTAINER(finestra), 8);
-    gtk_window_set_title(GTK_WINDOW(finestra), "Inserimento Editore");
+    gtk_window_set_title(GTK_WINDOW(finestra), "Inserimento Fornitore");
     gtk_window_set_position(GTK_WINDOW(finestra), GTK_WIN_POS_CENTER);
     gtk_widget_realize(GTK_WIDGET(finestra));
     vbox=gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
