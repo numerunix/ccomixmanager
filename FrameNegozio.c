@@ -8,6 +8,8 @@ static GtkWidget *indirizzo=NULL;
 static GtkWidget *citta=NULL;
 static GtkWidget *telefono=NULL;
 
+extern unsigned int negozioDAO(negozio *n);
+
 static void salvaNegozio() {
     unsigned long lid=0L;
     unsigned int result;

@@ -12,23 +12,6 @@ const editore *CreaEditore(unsigned long id, const char *nome, unsigned long sco
     return e;
 }
 
-unsigned long getIdEditore(const editore *e) {
-	return e->id;
-}
-
-unsigned long getScontoEditore(const editore *e) {
-	return e->sconto;
-}
-
-const char *getNomeEditore(const editore *e) {
-	return e->nome;
-}
-
-
-const char *getNoteEditore(const editore *e) {
-	return e->note;
-}
-
 void deallocaEditore(const editore *e)  {
     free(e->nome);
     free(e->note);

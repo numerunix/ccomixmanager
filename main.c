@@ -6,6 +6,9 @@ extern void creaFrameConnessione();
 extern void creaFrameEditore();
 MYSQL *conn=NULL;
 
+
+extern void creaFrameNegozio();
+
 static void helloWorld (GtkWidget *wid, GtkWidget *win)
 {
 /*  gchar **lista_autori=calloc(1, sizeof(gchar*));

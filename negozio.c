@@ -19,27 +19,6 @@ negozio *CreaNegozio(unsigned long id, char *nome, char *indirizzo, char *citta,
     return n;
 }
 
-unsigned long getIdNegozio(negozio *n) {
-    return n->idNegozio;
-}
-
-char *getNomeNegozio(negozio *n) {
-    return n->nome;
-}
-
-char *getIndirizzoNegozio(negozio *n) {
-    return n->indirizzo;
-}
-
-char *getCittaNegozio(negozio *n) {
-    return n->citta;
-}
-
-char *getTelefonoNegozio(negozio *n) {
-    return n->telefono;
-}
-
-
 void deallocaNegozio(negozio *n) {
     free(n->citta);
     free(n->indirizzo);
