@@ -1,5 +1,5 @@
-/*#include <gtk/gtk.h>
-#include "editore.h"
+#include <gtk/gtk.h>
+#include "fornitore.h"
 
 static GtkWindow *finestra=NULL;
 static GtkWidget *id=NULL;
