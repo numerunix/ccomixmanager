@@ -8,4 +8,8 @@ E' necessario prendere il database dal mio progetto comixmanager su github e rip
 Attualmente sono pesenti solo 3 form di inserimento: editore, fornitore e negozio.
 
 # ATTENZIONE
-# TUTTE LE VERSIONE PRESENTI SU QUESTO SITO SONO STATE MODIFICATE DA FRANCESCO SORRENTINO. DOVETE SCARICARE LA 0.1.2.5.
+# TUTTE LE VERSIONE PRESENTI SU QUESTO SITO SONO STATE MODIFICATE DA FRANCESCO SORRENTINO. DOVETE SCARICARE LA 0.1.2.
+
+
+
+[![Scarica dallo Snap Store](https://snapcraft.io/static/images/badges/it/snap-store-black.svg)](https://snapcraft.io/ccomixmanager)
