@@ -10,6 +10,6 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 
 parts:
   ccomixmanager:
-   source: http://numerone.altervista.org/Downloads/ccomixmanager-0.1.2.tar.xz
+    source: http://numerone.altervista.org/Downloads/ccomixmanager-0.1.2.tar.xz
     # See 'snapcraft plugins'
     plugin: meson
