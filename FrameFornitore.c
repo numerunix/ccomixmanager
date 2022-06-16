@@ -41,7 +41,16 @@ static void salva() {
         strfax=gtk_entry_get_text(GTK_ENTRY(fax));
         f=CreaFornitore(lid, strnome, strindirizzo, strcitta, strprovincia , strtelefono, strfax, stremail, strsito, strnote);
         result=fornitoreDAO(f);
-        deallocaFornitore(f);
+//        deallocaFornitore(f);
+        free(f->citta);
+        free(f->eMail);
+        free(f->fax);
+        free(f->indirizzo);
+        free(f->note);
+        free(f->provincia);
+        free(f->sitoWeb);
+        free(f->telefono);
+        free(f);
         f=NULL;
         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", result);
         gtk_dialog_run(GTK_DIALOG(d));
