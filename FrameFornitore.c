@@ -13,7 +13,7 @@ static void salva() {
     GtkWidget *d=NULL;
     char *strnome=NULL;
     char *strnote=NULL;
-    editore *e;
+    fornitore *f=NULL;
     if (gtk_entry_get_text_length(GTK_ENTRY(nome))>0)  {
         if (gtk_entry_get_text_length(GTK_ENTRY(id))>0)
             if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
@@ -25,10 +25,10 @@ static void salva() {
         sscanf(gtk_entry_get_text(GTK_ENTRY(sconto)),"%lu", &lsconto);
         strnome=gtk_entry_get_text(GTK_ENTRY(nome));
         strnote=gtk_entry_get_text(GTK_ENTRY(note));
-        e=CreaEditore(lid, strnome, lsconto, strnote);
-        result=editoreDAO(e);
-        deallocaEditore(e);
-        e=NULL;
+        //e=CreaEditore(lid, strnome, lsconto, strnote);
+        //result=editoreDAO(e);
+        //deallocaEditore(e);
+        f=NULL;
         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", result);
         gtk_dialog_run(GTK_DIALOG(d));
         gtk_widget_destroy(d);
@@ -87,4 +87,4 @@ static void creaFrame() {
     gtk_window_set_modal(finestra, TRUE);
     gtk_widget_show_all(GTK_WIDGET(finestra));
 }
-*/
+
