@@ -1,15 +1,21 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
+#include <mariadb/mysql.h>
 #include "articolo.h"
+extern void creaFrameConnessione();
+extern void creaFrameEditore();
+MYSQL *conn=NULL;
+
 static void helloWorld (GtkWidget *wid, GtkWidget *win)
 {
-  gchar **lista_autori=calloc(1, sizeof(gchar*));
+/*  gchar **lista_autori=calloc(1, sizeof(gchar*));
   lista_autori[0]="Giulio Sorrentino";
   GtkWidget *dialog = gtk_about_dialog_new();
   gtk_about_dialog_set_authors(dialog, lista_autori);
   gtk_about_dialog_set_copyright(dialog, "Il seguente programma è coperto da GPL v3 o, secondo la tua opionione, qualsiasi versione successiva.");
   gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (dialog);*/
+  creaFrameNegozio();
 }
 
 int main (int argc, char *argv[])
@@ -32,14 +38,14 @@ int main (int argc, char *argv[])
   g_signal_connect (win, "destroy", gtk_main_quit, NULL);
 
   /* Create a vertical box with buttons */
-  vbox = gtk_vbox_new (TRUE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (win), vbox);
 
-  button = gtk_button_new_from_stock (GTK_STOCK_DIALOG_INFO);
+  button = gtk_button_new_with_label("Informazioni");
 
   g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (helloWorld), (gpointer) win);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
-  button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+  button = gtk_button_new_with_label("Chiudi");
   g_signal_connect (button, "clicked", gtk_main_quit, NULL);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
 

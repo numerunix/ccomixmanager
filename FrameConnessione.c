@@ -66,7 +66,7 @@ void creaFrameConnessione() {
   label=gtk_label_new("IP del server: ");
   gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0)  ;
   ip=gtk_entry_new();
-  gtk_entry_set_text(ip, "127.0.0.1");
+  gtk_entry_set_text(GTK_ENTRY(ip), "127.0.0.1");
   gtk_box_pack_start(GTK_BOX(hbox), ip, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
   hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);

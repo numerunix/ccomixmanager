@@ -2,10 +2,6 @@
 #include "editore.h"
 
 extern MYSQL *conn;
-extern unsigned long getIdEditore(editore *e);
-extern char* getNomeEditore(editore *e);
-extern unsigned long *getScontoEditore(editore *e);
-extern char* getNoteEditore(editore *e);
 
 unsigned int editoreDAO(editore *e) {
     char query[4096];

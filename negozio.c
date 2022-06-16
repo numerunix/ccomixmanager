@@ -1,43 +1,49 @@
 #include "negozio.h"
 
-	negozio *CreaNegozio(unsigned long id, char *nome, char *indirizzo, char *citta,   unsigned long telefono) {
-		negozio *n=malloc(sizeof(negozio));
-		n->idNegozio=id;
+negozio *CreaNegozio(unsigned long id, char *nome, char *indirizzo, char *citta,   char *telefono) {
+    negozio *n=malloc(sizeof(negozio));
+    n->idNegozio=id;
 
-		n->nome=calloc(strlen(nome), sizeof(char));
-        strncpy(n->nome, nome, strlen(nome));
+    n->nome=calloc(strlen(nome), sizeof(char));
+    strncpy(n->nome, nome, strlen(nome));
 
-        n->indirizzo=calloc(strlen(indirizzo), sizeof(char));
-        strncpy(n->indirizzo, indirizzo, strlen(indirizzo));
+    n->indirizzo=calloc(strlen(indirizzo), sizeof(char));
+    strncpy(n->indirizzo, indirizzo, strlen(indirizzo));
 
-        n->citta=calloc(strlen(citta), sizeof(char));
-        strncpy(n->citta, citta, strlen(citta));
+    n->citta=calloc(strlen(citta), sizeof(char));
+    strncpy(n->citta, citta, strlen(citta));
 
-	n->telefono=telefono;
+    n->telefono=calloc(strlen(telefono), sizeof(char));
+    strncpy(n->telefono, telefono, strlen(telefono));
 
-        return n;
-	}
+    return n;
+}
 
-	unsigned long getIdNegozio(negozio *n) {
-		return n->idNegozio;
-	}
+unsigned long getIdNegozio(negozio *n) {
+    return n->idNegozio;
+}
 
-	char *getNomeNegozio(negozio *n) {
-		return n->nome;
-	}
+char *getNomeNegozio(negozio *n) {
+    return n->nome;
+}
 
-	char *getIndirizzoNegozio(negozio *n) {
-		return n->indirizzo;
+char *getIndirizzoNegozio(negozio *n) {
+    return n->indirizzo;
+}
 
-	}
+char *getCittaNegozio(negozio *n) {
+    return n->citta;
+}
 
-	char *getCittaNegozio(negozio *n) {
-		return n->citta;
-
-	}
-
-	unsigned long getTelefonoNegozio(negozio *n) {
-		return n->telefono;
-	}
+char *getTelefonoNegozio(negozio *n) {
+    return n->telefono;
+}
 
 
+void deallocaNegozio(negozio *n) {
+    free(n->citta);
+    free(n->indirizzo);
+    free(n->nome);
+    free(n->telefono);
+    free(n);
+}

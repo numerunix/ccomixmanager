@@ -28,3 +28,9 @@ char *getNomeEditore(editore *e) {
 char *getNoteEditore(editore *e) {
 	return e->note;
 }
+
+void deallocaEditore(editore *e)  {
+    free(e->nome);
+    free(e->note);
+    free(e);
+}
