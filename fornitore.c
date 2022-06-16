@@ -37,7 +37,7 @@ fornitore *CreaFornitore(unsigned long id, const char *nome, const char *indiriz
     return f;
 }
 
-void dellocaFornitore(const fornitore *f) {
+void dellocaFornitore(fornitore *f) {
     free(f->citta);
     free(f->eMail);
     free(f->fax);

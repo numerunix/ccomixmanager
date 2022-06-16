@@ -7,6 +7,8 @@ static GtkWidget *nome=NULL;
 static GtkWidget *sconto=NULL;
 static GtkWidget *note=NULL;
 
+extern unsigned int editoreDAO(editore *e);
+
 static void salva() {
     unsigned long lid=0L, lsconto=0L;
     unsigned int result;
@@ -41,7 +43,6 @@ static void salva() {
 }
 
 void creaFrameEditore() {
-
     GtkWidget *vbox=NULL;
     GtkWidget *hbox=NULL;
     GtkWidget *label=NULL;
@@ -50,7 +51,7 @@ void creaFrameEditore() {
     gtk_container_set_border_width(GTK_CONTAINER(finestra), 8);
     gtk_window_set_title(GTK_WINDOW(finestra), "Inserimento Editore");
     gtk_window_set_position(GTK_WINDOW(finestra), GTK_WIN_POS_CENTER);
-    gtk_widget_realize(finestra);
+    gtk_widget_realize(GTK_WIDGET(finestra));
     vbox=gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
     gtk_container_add(GTK_CONTAINER(finestra), vbox);
     hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
