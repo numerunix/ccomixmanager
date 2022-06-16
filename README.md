@@ -8,7 +8,7 @@ E' necessario prendere il database dal mio progetto comixmanager su github e rip
 Attualmente sono pesenti solo 3 form di inserimento: editore, fornitore e negozio.
 
 # ATTENZIONE
-# TUTTE LE VERSIONE PRESENTI SU QUESTO SITO SONO STATE MODIFICATE DA FRANCESCO SORRENTINO. DOVETE SCARICARE LA 0.1.2.
+# TUTTE LE VERSIONE PRESENTI SU QUESTO SITO SONO STATE MODIFICATE DA FRANCESCO SORRENTINO. DOVETE SCARICARE LA 0.1.2.5
 
 
 
