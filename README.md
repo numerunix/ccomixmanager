@@ -10,6 +10,7 @@ Attualmente sono pesenti solo 3 form di inserimento: editore, fornitore e negozi
 # ATTENZIONE
 # TUTTE LE VERSIONE PRESENTI SU QUESTO SITO SONO STATE MODIFICATE DA FRANCESCO SORRENTINO. DOVETE SCARICARE LA 0.1.2.5
 
+[![paypal](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H4ZHTFRCETWXG)
 
 
 [![Scarica dallo Snap Store](https://snapcraft.io/static/images/badges/it/snap-store-black.svg)](https://snapcraft.io/ccomixmanager)
