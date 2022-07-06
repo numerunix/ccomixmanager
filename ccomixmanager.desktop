@@ -3,6 +3,6 @@ Version=1.1
 Type=Application
 Name=ccomixmanager
 Comment=Primo gestionale per snap in C e GTK
-Exec=/snap/ccomixmanager/current/usr/bin/ccomixmanager
+Exec=/usr/bin/ccomixmanager
 Actions=
 Categories=Office;
