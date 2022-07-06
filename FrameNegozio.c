@@ -22,7 +22,7 @@ static void salvaNegozio() {
                 gtk_widget_destroy(d);
                 return;
             }
- 	sprintf(query, "INSERT INTO Negozi(idNegozio, nome, indirizzo, citta, telefono) VALUES(%lu, \"%s\", \"%s\", \"%s\", \"%s\");",gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(indirizzo)), gtk_entry_get_text(GTK_ENTRY(citta)), gtk_entry_get_text(GTK_ENTRY(telefono)));
+ 	sprintf(query, "INSERT INTO Negozi(idNegozio, nome, indirizzo, citta, telefono) VALUES(%lu, \"%s\", \"%s\", \"%s\", \"%s\");",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(indirizzo)), gtk_entry_get_text(GTK_ENTRY(citta)), gtk_entry_get_text(GTK_ENTRY(telefono)));
         mysql_real_query(conn, query, strlen(query));
          d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", mysql_errno(conn));
         gtk_dialog_run(GTK_DIALOG(d));
