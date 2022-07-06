@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include "negozio.h"
+#include <mariadb/mysql.h>
 
 static GtkWindow *finestra=NULL;
 static GtkWidget *id=NULL;
@@ -7,18 +7,13 @@ static GtkWidget *nome=NULL;
 static GtkWidget *indirizzo=NULL;
 static GtkWidget *citta=NULL;
 static GtkWidget *telefono=NULL;
-
-extern unsigned int negozioDAO(negozio *n);
+static char query[4096];
+ 
+extern MYSQL *conn;
 
 static void salvaNegozio() {
     unsigned long lid=0L;
-    unsigned int result;
     GtkWidget *d=NULL;
-    char *strnome=NULL;
-    char *strindirizzo=NULL;
-    char *strcitta=NULL;
-    char *strtelefono;
-    negozio *n;
     if (gtk_entry_get_text_length(GTK_ENTRY(nome))>0 && gtk_entry_get_text_length(GTK_ENTRY(citta))>0 && gtk_entry_get_text_length(GTK_ENTRY(indirizzo))>0 && gtk_entry_get_text_length(GTK_ENTRY(telefono))>0)  {
         if (gtk_entry_get_text_length(GTK_ENTRY(id))>0)
             if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
@@ -27,14 +22,9 @@ static void salvaNegozio() {
                 gtk_widget_destroy(d);
                 return;
             }
-        strnome=gtk_entry_get_text(GTK_ENTRY(nome));
-        strindirizzo=gtk_entry_get_text(GTK_ENTRY(indirizzo));
-        strcitta=gtk_entry_get_text(GTK_ENTRY(citta));
-        strtelefono=gtk_entry_get_text(GTK_ENTRY(telefono));
-        n=CreaNegozio(lid, strnome, strindirizzo, strcitta, strtelefono);
-        result=negozioDAO(n);
-        deallocaNegozio(n);
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", result);
+ 	sprintf(query, "INSERT INTO Negozi(idNegozio, nome, indirizzo, citta, telefono) VALUES(%lu, \"%s\", \"%s\", \"%s\", \"%s\");",gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(indirizzo)), gtk_entry_get_text(GTK_ENTRY(citta)), gtk_entry_get_text(GTK_ENTRY(telefono)));
+        mysql_real_query(conn, query, strlen(query));
+         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", mysql_errno(conn));
         gtk_dialog_run(GTK_DIALOG(d));
         gtk_widget_destroy(d);
     } else if (gtk_entry_get_text_length(GTK_ENTRY(nome))==0) {

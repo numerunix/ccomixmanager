@@ -1,21 +1,18 @@
 #include <gtk/gtk.h>
-#include "editore.h"
+#include <mariadb/mysql.h>
 
 static GtkWindow *finestra=NULL;
 static GtkWidget *id=NULL;
 static GtkWidget *nome=NULL;
 static GtkWidget *sconto=NULL;
 static GtkWidget *note=NULL;
+static char query[4096];
 
-extern unsigned int editoreDAO(editore *e);
+extern MYSQL *conn;
 
 static void salva() {
     unsigned long lid=0L, lsconto=0L;
-    unsigned int result;
     GtkWidget *d=NULL;
-    char *strnome=NULL;
-    char *strnote=NULL;
-    editore *e;
     if (gtk_entry_get_text_length(GTK_ENTRY(nome))>0)  {
         if (gtk_entry_get_text_length(GTK_ENTRY(id))>0)
             if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
@@ -25,15 +22,11 @@ static void salva() {
                 return;
             }
         sscanf(gtk_entry_get_text(GTK_ENTRY(sconto)),"%lu", &lsconto);
-        strnome=gtk_entry_get_text(GTK_ENTRY(nome));
-        strnote=gtk_entry_get_text(GTK_ENTRY(note));
-        e=CreaEditore(lid, strnome, lsconto, strnote);
-        result=editoreDAO(e);
-        deallocaEditore(e);
-        e=NULL;
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", result);
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
+    	sprintf(query, "INSERT INTO Editori(idEditore, nome, sconto, note) VALUES(%lu, \"%s\", %lu, \"%s\");", lid, gtk_entry_get_text(GTK_ENTRY(nome)), lsconto, gtk_entry_get_text(GTK_ENTRY(note)));
+    	mysql_real_query(conn, query, strlen(query));
+    	d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", mysql_errno(conn));
+ 	gtk_dialog_run(GTK_DIALOG(d));
+  	gtk_widget_destroy(d);
     } else {
         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo nome non può essere NULL");
         gtk_dialog_run(GTK_DIALOG(d));

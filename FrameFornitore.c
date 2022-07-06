@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include "fornitore.h"
+#include <mariadb/mysql.h>
 
 static GtkWindow *finestra=NULL;
 static GtkWidget *id=NULL;
@@ -12,15 +12,13 @@ static GtkWidget *sitoWeb=NULL;
 static GtkWidget *note=NULL;
 static GtkWidget *telefono=NULL;
 static GtkWidget *fax=NULL;
+static char query[4096];
+extern MYSQL *conn;
 
-extern unsigned int fornitoreDAO(fornitore *f);
 
 static void salva() {
     unsigned long lid=0L;
-    unsigned int result;
     GtkWidget *d=NULL;
-    char *strnome=NULL, *strindirizzo=NULL, *strcitta=NULL, *strprovincia=NULL, *stremail=NULL, *strsito=NULL, *strnote=NULL, *strtelefono=NULL, *strfax=NULL;
-    fornitore *f=NULL;
     if (gtk_entry_get_text_length(GTK_ENTRY(nome))>0 && gtk_entry_get_text_length(GTK_ENTRY(indirizzo))>0 && gtk_entry_get_text_length(GTK_ENTRY(citta))>0 && gtk_entry_get_text_length(GTK_ENTRY(provincia))>0 && gtk_entry_get_text_length(GTK_ENTRY(telefono))>0)  {
         if (gtk_entry_get_text_length(GTK_ENTRY(id))>0)
             if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
@@ -29,30 +27,9 @@ static void salva() {
                 gtk_widget_destroy(d);
                 return;
             }
-
-        strnome=gtk_entry_get_text(GTK_ENTRY(nome));
-        strindirizzo=gtk_entry_get_text(GTK_ENTRY(indirizzo));
-        strcitta=gtk_entry_get_text(GTK_ENTRY(citta));
-        strprovincia=gtk_entry_get_text(GTK_ENTRY(provincia));
-        stremail=gtk_entry_get_text(GTK_ENTRY(email));
-        strsito=gtk_entry_get_text(GTK_ENTRY(sitoWeb));
-        strnote=gtk_entry_get_text(GTK_ENTRY(note));
-        strtelefono=gtk_entry_get_text(GTK_ENTRY(telefono));
-        strfax=gtk_entry_get_text(GTK_ENTRY(fax));
-        f=CreaFornitore(lid, strnome, strindirizzo, strcitta, strprovincia , strtelefono, strfax, stremail, strsito, strnote);
-        result=fornitoreDAO(f);
-//        deallocaFornitore(f);
-        free(f->citta);
-        free(f->eMail);
-        free(f->fax);
-        free(f->indirizzo);
-        free(f->note);
-        free(f->provincia);
-        free(f->sitoWeb);
-        free(f->telefono);
-        free(f);
-        f=NULL;
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", result);
+    sprintf(query, "INSERT INTO Fornitori (idFornitore, nome, indirizzo, citta, provincia, email, sitoweb, note, telefono, fax) VALUES(%lu, \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\");",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(indirizzo)), gtk_entry_get_text(GTK_ENTRY(citta)), gtk_entry_get_text(GTK_ENTRY(provincia)), gtk_entry_get_text(GTK_ENTRY(telefono)), gtk_entry_get_text(GTK_ENTRY(fax)), gtk_entry_get_text(GTK_ENTRY(email)), gtk_entry_get_text(GTK_ENTRY(sitoWeb)), gtk_entry_get_text(GTK_ENTRY(note)));
+    mysql_real_query(conn, query, strlen(query));
+    d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", mysql_errno(conn));
         gtk_dialog_run(GTK_DIALOG(d));
         gtk_widget_destroy(d);
     } else if (gtk_entry_get_text_length(GTK_ENTRY(nome))==0){
