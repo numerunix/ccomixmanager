@@ -7,8 +7,28 @@ E' necessario prendere il database dal mio progetto comixmanager su github e rip
 
 Attualmente sono pesenti solo 3 form di inserimento: editore, fornitore e negozio.
 
-# ATTENZIONE
-# TUTTE LE VERSIONE PRESENTI SU QUESTO SITO SONO STATE MODIFICATE DA FRANCESCO SORRENTINO. DOVETE SCARICARE LA 0.1.2.5
+# Installazione
+# Debian
+sudo add-apt-repository "http://MIO_INDIRIZZO_IP/repos/apt/debian bullseye main"
+
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 9D4AE50D
+
+sudo apt install ccomixmanager
+
+# The OLD FASCION DEBIAN WAY
+Per installare i package Deb disponibili nella sezione release, bisogna usare dpkg passando come parametro i e i nomi dei files da installare.
+Verosimilmente
+
+# cd Scaricati
+
+# sudo dpkg -i *.deb
+
+A questo punto bisogna scaricare le librerie wxwidgets necessarie per l'esecuzione
+
+# sudo apt -f install
+
+I package sono universali e vanno bene sia per Ubuntu che per debian.
+Sentitevi liberi di incorporarli nei vostri server apt, a patto di mantenere integro il binario, come prevede la licenza GPL.
 
 [![paypal](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H4ZHTFRCETWXG)
 
