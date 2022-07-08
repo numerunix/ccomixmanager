@@ -30,8 +30,11 @@ A questo punto bisogna scaricare le librerie wxwidgets necessarie per l'esecuzio
 I package sono universali e vanno bene sia per Ubuntu che per debian.
 Sentitevi liberi di incorporarli nei vostri server apt, a patto di mantenere integro il binario, come prevede la licenza GPL.
 
+[![Scarica dallo Snap Store](https://snapcraft.io/static/images/badges/it/snap-store-black.svg)](https://snapcraft.io/ccomixmanager)
+
+# Donazioni
+
 [![paypal](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H4ZHTFRCETWXG)
 
 oppure puoi fare una donazione tramite carta hype.
 
-[![Scarica dallo Snap Store](https://snapcraft.io/static/images/badges/it/snap-store-black.svg)](https://snapcraft.io/ccomixmanager)
