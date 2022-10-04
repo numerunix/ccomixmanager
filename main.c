@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <mariadb/mysql.h>
-#include "articolo.h"
+
 extern void creaFrameConnessione();
 extern void creaFrameEditore();
 MYSQL *conn=NULL;
@@ -9,6 +9,12 @@ MYSQL *conn=NULL;
 
 extern void creaFrameFornitore();
 extern void creaFrameNegozio();
+extern void creaFrameCollana();
+extern void creaFrameClienti();
+extern void creaFrameCategoria();
+extern void creaFrameDipendente();
+extern void creaFrameArticolo();
+extern void creaFrameOggetto();
 
 static void helloWorld (GtkWidget *wid, GtkWidget *win)
 {
@@ -59,12 +65,37 @@ int main (int argc, char *argv[])
 
   g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (creaFrameNegozio), NULL);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  button = gtk_button_new_with_label("Inserisci Collana");
+
+  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (creaFrameCollana), NULL);
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  button = gtk_button_new_with_label("Inserisci Cliente");
+
+  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (creaFrameClienti), NULL);
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  button = gtk_button_new_with_label("Inserisci Categoria");
+
+  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (creaFrameCategoria), NULL);
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  button = gtk_button_new_with_label("Inserisci Dipendente");
+
+  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (creaFrameDipendente), NULL);
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  button = gtk_button_new_with_label("Inserisci Articolo");
+
+  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (creaFrameArticolo), NULL);
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  button = gtk_button_new_with_label("Inserisci Oggetto");
+
+  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (creaFrameOggetto), NULL);
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
   button = gtk_button_new_with_label("Informazioni");
+
 
   g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (helloWorld), (gpointer) win);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
-
   button = gtk_button_new_with_label("Chiudi");
+  
   g_signal_connect (button, "clicked", gtk_main_quit, NULL);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
 
