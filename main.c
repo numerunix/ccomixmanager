@@ -32,7 +32,7 @@ static void helloWorld (GtkWidget *wid, GtkWidget *win)
   gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), "© Giulio Sorrentino 2022");
   gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(dialog), "http://github.com/numerunix/ccomixmanager");
   gtk_about_dialog_set_license_type(GTK_ABOUT_DIALOG(dialog), GTK_LICENSE_GPL_3_0);
-  gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), "0.2");
+  gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), "0.3");
   gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog),gdk_pixbuf_new_from_xpm_data(logo_xpm));
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
