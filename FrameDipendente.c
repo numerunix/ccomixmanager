@@ -8,48 +8,35 @@ static GtkWidget *cognome=NULL;
 static GtkWidget *cellulare=NULL;
 static GtkWidget *idNegozio=NULL;
 static char query[4096];
+static int errore;
+static GtkWidget *d=NULL;
  
 extern MYSQL *conn;
 
 static void salva() {
     unsigned long lid=0L, lidnegozio=0L;
-    GtkWidget *d=NULL;
-    if (gtk_entry_get_text_length(GTK_ENTRY(nome))>0 &&
-    gtk_entry_get_text_length(GTK_ENTRY(cognome))>0 &&
-    gtk_entry_get_text_length(GTK_ENTRY(cellulare))>0)  {
-        if (gtk_entry_get_text_length(GTK_ENTRY(id))>0)
-            if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
-                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Dipendente non è intero.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
-                return;
-            }
-        if (gtk_entry_get_text_length(GTK_ENTRY(idNegozio))>0)
-            if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lidnegozio) != 1) {
-                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Negozio non è intero.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
-                return;
-            }
+    if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
+	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Dipendente non è intero.");
+           gtk_dialog_run(GTK_DIALOG(d));
+           gtk_widget_destroy(d);
+           return;
+   }
+   if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lidnegozio) != 1) {
+	  d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Negozio non è intero.");
+          gtk_dialog_run(GTK_DIALOG(d));
+          gtk_widget_destroy(d);
+          return;
+  }
 
- 	sprintf(query, "INSERT INTO Dipendenti(idDipendente, nome, cognome, cellulare, idNegozio) VALUES(%lu, \"%s\", \"%s\",\"%s\", \"%lu\");",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(cognome)), gtk_entry_get_text(GTK_ENTRY(cellulare)), lidnegozio);
+ 	sprintf(query, "INSERT INTO Dipendenti(idDipendente, nome, cognome, cellulare, idNegozio) VALUES(%lu, '%s', '%s','%s', %lu);",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(cognome)), gtk_entry_get_text(GTK_ENTRY(cellulare)), lidnegozio);
         mysql_real_query(conn, query, strlen(query));
-         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", mysql_errno(conn));
+        errore=mysql_errno(conn);
+        if (errore==0)
+         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Operazione effettuata");
+	else
+	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Errore %d: %s", errore, mysql_error(conn));
         gtk_dialog_run(GTK_DIALOG(d));
         gtk_widget_destroy(d);
-    } else if (gtk_entry_get_text_length(GTK_ENTRY(nome))==0) {
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo nome non può essere NULL");
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
-    } else if (gtk_entry_get_text_length(GTK_ENTRY(cognome))==0) {
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo cognome non può essere NULL");
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
-    } else if (gtk_entry_get_text_length(GTK_ENTRY(cellulare))==0) {
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo cellulare non può essere NULL");
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
-    }
 }
 
 void creaFrameDipendente() {

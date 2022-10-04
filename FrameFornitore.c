@@ -13,51 +13,28 @@ static GtkWidget *note=NULL;
 static GtkWidget *telefono=NULL;
 static GtkWidget *fax=NULL;
 static char query[4096];
+static int errore;
+static GtkWidget *d=NULL;
 extern MYSQL *conn;
 
 
 static void salva() {
     unsigned long lid=0L;
-    GtkWidget *d=NULL;
-    if (gtk_entry_get_text_length(GTK_ENTRY(nome))>0 && gtk_entry_get_text_length(GTK_ENTRY(indirizzo))>0 && gtk_entry_get_text_length(GTK_ENTRY(citta))>0 && gtk_entry_get_text_length(GTK_ENTRY(provincia))>0 && gtk_entry_get_text_length(GTK_ENTRY(telefono))>0)  {
-        if (gtk_entry_get_text_length(GTK_ENTRY(id))>0)
-            if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
-                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Fornitore non è intero.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
-                return;
-            }
-    sprintf(query, "INSERT INTO Fornitori (idFornitore, nome, indirizzo, citta, provincia, email, sitoweb, note, telefono, fax) VALUES(%lu, \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\");",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(indirizzo)), gtk_entry_get_text(GTK_ENTRY(citta)), gtk_entry_get_text(GTK_ENTRY(provincia)), gtk_entry_get_text(GTK_ENTRY(telefono)), gtk_entry_get_text(GTK_ENTRY(fax)), gtk_entry_get_text(GTK_ENTRY(email)), gtk_entry_get_text(GTK_ENTRY(sitoWeb)), gtk_entry_get_text(GTK_ENTRY(note)));
+   if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
+	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Fornitore non è intero.");
+           gtk_dialog_run(GTK_DIALOG(d));
+           gtk_widget_destroy(d);
+           return;
+   }
+    sprintf(query, "INSERT INTO Fornitori (idFornitore, nome, indirizzo, citta, provincia, email, sitoweb, note, telefono, fax) VALUES(%lu, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(indirizzo)), gtk_entry_get_text(GTK_ENTRY(citta)), gtk_entry_get_text(GTK_ENTRY(provincia)), gtk_entry_get_text(GTK_ENTRY(telefono)), gtk_entry_get_text(GTK_ENTRY(fax)), gtk_entry_get_text(GTK_ENTRY(email)), gtk_entry_get_text(GTK_ENTRY(sitoWeb)), gtk_entry_get_text(GTK_ENTRY(note)));
     mysql_real_query(conn, query, strlen(query));
-    d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", mysql_errno(conn));
+        errore=mysql_errno(conn);
+        if (errore==0)
+         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Operazione effettuata");
+	else
+	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Errore %d: %s", errore, mysql_error(conn));
         gtk_dialog_run(GTK_DIALOG(d));
         gtk_widget_destroy(d);
-    } else if (gtk_entry_get_text_length(GTK_ENTRY(nome))==0){
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo nome non può essere NULL");
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
-
-    } else if (gtk_entry_get_text_length(GTK_ENTRY(indirizzo))==0){
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo indirizzo non può essere NULL");
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
-
-    } else if (gtk_entry_get_text_length(GTK_ENTRY(citta))==0){
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo citta non può essere NULL");
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
-
-    } else if (gtk_entry_get_text_length(GTK_ENTRY(provincia))==0){
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo provincia non può essere NULL");
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
-
-    } else {
-        d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo telefono non può essere NULL");
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
-
-    }
 }
 
 void creaFrameFornitore() {

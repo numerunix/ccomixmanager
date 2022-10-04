@@ -11,84 +11,72 @@ static GtkWidget *sconto=NULL;
 static GtkWidget *minimo=NULL;
 static GtkWidget *prezzo=NULL;
 static GtkWidget *vendita=NULL;
+static int errore;
+static GtkWidget *d=NULL;
 static char query[4096];
  
 extern MYSQL *conn;
 
 static void salva() {
     unsigned long lid=0L, liddipendente=0L, lidnegozio=0L, lidarticolo=0L, lquantita=0L, lsconto=0L, lminimo=0L, lvendita=0L;
-    GtkWidget *d=NULL;
-    if (gtk_entry_get_text_length(GTK_ENTRY(prezzo))>0) {
-        if (gtk_entry_get_text_length(GTK_ENTRY(id))>0) {
-            if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
+    if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
                 d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Collana non è intero.");
                 gtk_dialog_run(GTK_DIALOG(d));
                 gtk_widget_destroy(d);
                 return;
-            }
-        if (gtk_entry_get_text_length(GTK_ENTRY(idDipendente))>0)
-            if (sscanf(gtk_entry_get_text(GTK_ENTRY(idDipendente)),"%lu", &liddipendente) != 1) {
+    }
+    if (sscanf(gtk_entry_get_text(GTK_ENTRY(idDipendente)),"%lu", &liddipendente) != 1) {
                 d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Dipendente non è intero.");
                 gtk_dialog_run(GTK_DIALOG(d));
                 gtk_widget_destroy(d);
                 return;
-            }
-        if (gtk_entry_get_text_length(GTK_ENTRY(idNegozio))>0)
-            if (sscanf(gtk_entry_get_text(GTK_ENTRY(idNegozio)),"%lu", &lidnegozio) != 1) {
+   }
+   if (sscanf(gtk_entry_get_text(GTK_ENTRY(idNegozio)),"%lu", &lidnegozio) != 1) {
                 d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Negozio non è intero.");
                 gtk_dialog_run(GTK_DIALOG(d));
                 gtk_widget_destroy(d);
                 return;
-            }
-
-        if (gtk_entry_get_text_length(GTK_ENTRY(idArticolo))>0)
-            if (sscanf(gtk_entry_get_text(GTK_ENTRY(idArticolo)),"%lu", &lidarticolo) != 1) {
+  }
+  if (sscanf(gtk_entry_get_text(GTK_ENTRY(idArticolo)),"%lu", &lidarticolo) != 1) {
                 d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Editore non è intero.");
                 gtk_dialog_run(GTK_DIALOG(d));
                 gtk_widget_destroy(d);
                 return;
-            }
-
-        if (gtk_entry_get_text_length(GTK_ENTRY(quantita))>0)
-            if (sscanf(gtk_entry_get_text(GTK_ENTRY(quantita)),"%lu", &lquantita) != 1) {
+ }
+ if (sscanf(gtk_entry_get_text(GTK_ENTRY(quantita)),"%lu", &lquantita) != 1) {
                 d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo Quantita non è intero.");
                 gtk_dialog_run(GTK_DIALOG(d));
                 gtk_widget_destroy(d);
                 return;
-            }
-        if (gtk_entry_get_text_length(GTK_ENTRY(sconto))>0)
-            if (sscanf(gtk_entry_get_text(GTK_ENTRY(sconto)),"%lu", &lsconto) != 1) {
+ }
+ if (sscanf(gtk_entry_get_text(GTK_ENTRY(sconto)),"%lu", &lsconto) != 1) {
                 d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo sconto non è intero.");
                 gtk_dialog_run(GTK_DIALOG(d));
                 gtk_widget_destroy(d);
                 return;
-            }
-        if (gtk_entry_get_text_length(GTK_ENTRY(minimo))>0)
-            if (sscanf(gtk_entry_get_text(GTK_ENTRY(minimo)),"%lu", &lminimo) != 1) {
+ }
+ if (sscanf(gtk_entry_get_text(GTK_ENTRY(minimo)),"%lu", &lminimo) != 1) {
                 d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo minimo non è intero.");
                 gtk_dialog_run(GTK_DIALOG(d));
                 gtk_widget_destroy(d);
                 return;
-            }
-        if (gtk_entry_get_text_length(GTK_ENTRY(vendita))>0)
-            if (sscanf(gtk_entry_get_text(GTK_ENTRY(vendita)),"%lu", &lvendita) != 1) {
+ }
+ if (sscanf(gtk_entry_get_text(GTK_ENTRY(vendita)),"%lu", &lvendita) != 1) {
                 d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo vendita non è intero.");
                 gtk_dialog_run(GTK_DIALOG(d));
                 gtk_widget_destroy(d);
                 return;
-            }
+ }
 
- 	sprintf(query, "INSERT INTO Oggetti(idOggetto, quantita, prezzo, sconto, minimo, vendita, iddipendente, idnegozio, idarticolo) VALUES(%lu,%lu,\"%s\",%lu,%lu,%lu,%lu,%lu,%lu);",lid, lquantita,gtk_entry_get_text(GTK_ENTRY(prezzo)),lsconto,lminimo,lvendita,liddipendente, lidnegozio, lidarticolo);
+ sprintf(query, "INSERT INTO Oggetti(idOggetto, quantita, prezzo, sconto, minimo, vendita, iddipendente, idnegozio, idarticolo) VALUES(%lu,%lu,'%s',%lu,%lu,%lu,%lu,%lu,%lu);",lid, lquantita,gtk_entry_get_text(GTK_ENTRY(prezzo)),lsconto,lminimo,lvendita,liddipendente, lidnegozio, lidarticolo);
         mysql_real_query(conn, query, strlen(query));
-         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query  ha dato numero di uscita %u", mysql_errno(conn));
+           errore=mysql_errno(conn);
+        if (errore==0)
+         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Operazione effettuata");
+	else
+	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Errore %d: %s", errore, mysql_error(conn));
         gtk_dialog_run(GTK_DIALOG(d));
         gtk_widget_destroy(d);
-    } else {
-    	d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo prezzo non può essere NULL");
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
-    }
-}
 }
 
 void creaFrameOggetto() {
