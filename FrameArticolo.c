@@ -17,6 +17,55 @@ static char query[4096];
  
 extern MYSQL *conn;
 
+static void carica() {
+	MYSQL_RES * res=NULL;
+	MYSQL_ROW row=NULL;
+	unsigned long lid=0L;
+	GtkWidget *d=NULL;
+        if (gtk_entry_get_text_length(GTK_ENTRY(id))>0)
+            if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
+                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Collana non è intero.");
+                gtk_dialog_run(GTK_DIALOG(d));
+                gtk_widget_destroy(d);
+                return;
+            }
+       sprintf(query, "SELECT descrizione, codiceabarre, iva, note, numero, datapubblicazione, idcollana, idcategoria, ideditore, idfornitore FROM Articoli WHERE idArticolo=\"%lu\";",lid);
+       mysql_real_query(conn, query, strlen(query));
+       res=mysql_store_result(conn);
+       row=mysql_fetch_row(res);
+       gtk_entry_set_text(GTK_ENTRY(descrizione), row[0]);
+       gtk_entry_set_text(GTK_ENTRY(codiceABarre), row[1]);
+       gtk_entry_set_text(GTK_ENTRY(iva), row[2]);
+       gtk_entry_set_text(GTK_ENTRY(note), row[3]);
+       gtk_entry_set_text(GTK_ENTRY(numero), row[4]);
+       gtk_entry_set_text(GTK_ENTRY(dataPubblicazione), row[5]);
+       gtk_entry_set_text(GTK_ENTRY(idCollana), row[6]);
+       gtk_entry_set_text(GTK_ENTRY(idCategoria), row[7]);
+       gtk_entry_set_text(GTK_ENTRY(idEditore), row[8]);
+       gtk_entry_set_text(GTK_ENTRY(idFornitore), row[9]);
+       mysql_free_result(res);
+}
+
+static void edita() {
+GtkWidget *d=NULL;
+unsigned long lid=0L, lidcollana=0L, lidcategoria=0L, lideditore=0L, lidfornitore=0L, liva=0L, lnumero=0L;
+        sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid);
+        sscanf(gtk_entry_get_text(GTK_ENTRY(idCollana)),"%lu", &lidcollana);
+        sscanf(gtk_entry_get_text(GTK_ENTRY(idCategoria)),"%lu", &lidcategoria);
+        sscanf(gtk_entry_get_text(GTK_ENTRY(idEditore)),"%lu", &lideditore);
+        sscanf(gtk_entry_get_text(GTK_ENTRY(idFornitore)),"%lu", &lidfornitore);
+        sscanf(gtk_entry_get_text(GTK_ENTRY(iva)),"%lu", &liva);
+        sscanf(gtk_entry_get_text(GTK_ENTRY(numero)),"%lu", &lnumero);
+        
+ 	sprintf(query, "UPDATE Articoli set descrizione=\"%s\", codiceabarre=\"%s\", iva=%lu, numero=%lu, datapubblicazione=\"%s\", note=\"%s\", idcollana=%lu, idcategoria=%lu, ideditore=%lu, idfornitore=%lu WHERE idArticolo=%lu;",gtk_entry_get_text(GTK_ENTRY(descrizione)),gtk_entry_get_text(GTK_ENTRY(codiceABarre)),
+liva, lnumero, gtk_entry_get_text(GTK_ENTRY(dataPubblicazione)),gtk_entry_get_text(GTK_ENTRY(note)), lidcollana, lidcategoria, lideditore, lidfornitore, lid);
+        mysql_real_query(conn, query, strlen(query));
+         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query %s ha dato numero di uscita %u", query, mysql_errno(conn));
+        gtk_dialog_run(GTK_DIALOG(d));
+        gtk_widget_destroy(d);
+
+}
+
 static void salva() {
     unsigned long lid=0L, lidcollana=0L, lidcategoria=0L, lideditore=0L, lidfornitore=0L, liva=0L, lnumero=0L;
     GtkWidget *d=NULL;
@@ -75,7 +124,7 @@ static void salva() {
                 return;
             }
  	sprintf(query, "INSERT INTO Articoli(idArticolo, descrizione, codiceabarre, iva, numero, datapubblicazione, note, idcollana, idcategoria, ideditore, idfornitore) VALUES(%lu, \"%s\",\"%s\",\"%s\",\"%lu\",\"%s\", \"%s\", \"%lu\", \"%lu\", \"%lu\", \"%lu\");",lid, gtk_entry_get_text(GTK_ENTRY(descrizione)),gtk_entry_get_text(GTK_ENTRY(codiceABarre)),
- 	gtk_entry_get_text(GTK_ENTRY(iva)), lnumero, gtk_entry_get_text(GTK_ENTRY(dataPubblicazione)),gtk_entry_get_text(GTK_ENTRY(note)), lidcollana, lidcategoria, lideditore, lidfornitore);
+gtk_entry_get_text(GTK_ENTRY(iva)), lnumero, gtk_entry_get_text(GTK_ENTRY(dataPubblicazione)),gtk_entry_get_text(GTK_ENTRY(note)), lidcollana, lidcategoria, lideditore, lidfornitore);
         mysql_real_query(conn, query, strlen(query));
          d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "La query ha dato numero di uscita %u", mysql_errno(conn));
         gtk_dialog_run(GTK_DIALOG(d));
@@ -196,6 +245,12 @@ void creaFrameArticolo() {
     bottone=gtk_button_new_with_label("Ok");
     g_signal_connect(bottone, "clicked", G_CALLBACK(salva), NULL);
     gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
+    bottone=gtk_button_new_with_label("Carica dati");
+    g_signal_connect(bottone, "clicked", G_CALLBACK(carica), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);    
+    bottone=gtk_button_new_with_label("Modifica dati");
+    g_signal_connect(bottone, "clicked", G_CALLBACK(edita), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);    
     bottone=gtk_button_new_with_label("Annulla");
     g_signal_connect(bottone, "clicked", G_CALLBACK(gtk_window_close), NULL);
     gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
