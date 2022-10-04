@@ -11,6 +11,43 @@ static int errore;
  
 extern MYSQL *conn;
 
+static void carica() {
+	MYSQL_RES * res=NULL;
+	MYSQL_ROW row=NULL;
+	unsigned long lid=0L;
+        sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid);
+         sprintf(query, "SELECT nome, note FROM Categoria WHERE idCategoria='%lu';",lid);
+       mysql_real_query(conn, query, strlen(query));
+       res=mysql_store_result(conn);
+       row=mysql_fetch_row(res);
+       if (row==NULL) {
+               d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "La categoria inserito non è stato trovato.");
+                gtk_dialog_run(GTK_DIALOG(d));
+                gtk_widget_destroy(d);
+                return;
+       }
+       
+       gtk_entry_set_text(GTK_ENTRY(nome), row[0]);
+       gtk_entry_set_text(GTK_ENTRY(note), row[1]);
+       mysql_free_result(res);
+}
+
+static void modifica() {
+unsigned long lid=0L;
+        sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid);
+        
+ 	sprintf(query, "UPDATE Categoria SET nome='%s', note='%s' WHERE idCategoria=%lu;",gtk_entry_get_text(GTK_ENTRY(nome)),gtk_entry_get_text(GTK_ENTRY(note)), lid);
+        mysql_real_query(conn, query, strlen(query));
+        errore=mysql_errno(conn);
+        if (errore != 0)
+	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Errore %d: %s", errore, mysql_error(conn));
+	else
+         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Operazione effettuata");
+        gtk_dialog_run(GTK_DIALOG(d));
+        gtk_widget_destroy(d);
+ 
+}
+
 static void salva() {
     unsigned long lid=0L;
     if (gtk_entry_get_text_length(GTK_ENTRY(id))>0)
@@ -63,9 +100,20 @@ void creaFrameCategoria() {
     gtk_box_pack_start(GTK_BOX(hbox), note, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
     hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-    bottone=gtk_button_new_with_label("Ok");
+    bottone=gtk_button_new_with_label("Salva");
     g_signal_connect(bottone, "clicked", G_CALLBACK(salva), NULL);
     gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
+
+    bottone=gtk_button_new_with_label("Carica");
+    g_signal_connect(bottone, "clicked", G_CALLBACK(carica), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
+
+
+    bottone=gtk_button_new_with_label("Modifica");
+    g_signal_connect(bottone, "clicked", G_CALLBACK(modifica), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
+
+
     bottone=gtk_button_new_with_label("Annulla");
     g_signal_connect(bottone, "clicked", G_CALLBACK(gtk_window_close), NULL);
     gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);

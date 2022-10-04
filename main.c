@@ -17,6 +17,12 @@ extern void creaFrameDipendente();
 extern void creaFrameArticolo();
 extern void creaFrameOggetto();
 
+static void esci() {
+	if (conn!=NULL)
+		mysql_close(conn);
+	gtk_main_quit();
+}
+
 static void helloWorld (GtkWidget *wid, GtkWidget *win)
 {
   const gchar **lista_autori=calloc(1, sizeof(gchar*));
@@ -49,7 +55,7 @@ int main (int argc, char *argv[])
   gtk_window_set_title (GTK_WINDOW (win), "Hello World");
   gtk_window_set_position (GTK_WINDOW (win), GTK_WIN_POS_CENTER);
   gtk_widget_realize (win);
-  g_signal_connect (win, "destroy", gtk_main_quit, NULL);
+  g_signal_connect (win, "destroy", esci, NULL);
 
   /* Create a vertical box with buttons */
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);

@@ -219,7 +219,7 @@ void creaFrameOggetto() {
     gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
 
 
-    bottone=gtk_button_new_with_label("Aggiorna");
+    bottone=gtk_button_new_with_label("Modifica");
     g_signal_connect(bottone, "clicked", G_CALLBACK(aggiorna), NULL);
     gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
     
