@@ -17,6 +17,33 @@ static int errore;
 static GtkWidget *d=NULL;
 extern MYSQL *conn;
 
+static void carica() {
+	MYSQL_RES *res;
+	MYSQL_ROW row;
+	unsigned long lid;
+	sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid);
+	sprintf(query, "SELECT nome, indirizzo, citta, provincia, email, sitoweb, note, telefono, fax FROM Fornitori where idFOrnitore=%lu", lid);
+	mysql_real_query(conn, query, strlen(query));
+	res=mysql_store_result(conn);
+	row=mysql_fetch_row(res);
+	 if (row==NULL) {
+               d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "IL Fornitore inserito non è stato trovato.");
+                gtk_dialog_run(GTK_DIALOG(d));
+                gtk_widget_destroy(d);
+                return;
+       }
+       gtk_entry_set_text(GTK_ENTRY(nome), row[0]);
+       gtk_entry_set_text(GTK_ENTRY(indirizzo), row[1]);
+       gtk_entry_set_text(GTK_ENTRY(citta), row[2]);
+       gtk_entry_set_text(GTK_ENTRY(provincia), row[3]);
+       gtk_entry_set_text(GTK_ENTRY(email), row[4]);
+       gtk_entry_set_text(GTK_ENTRY(sitoWeb), row[5]);
+       gtk_entry_set_text(GTK_ENTRY(note), row[6]);
+       gtk_entry_set_text(GTK_ENTRY(telefono), row[7]);
+       gtk_entry_set_text(GTK_ENTRY(fax), row[8]);
+       mysql_free_result(res);
+}
+
 
 static void salva() {
     unsigned long lid=0L;
@@ -36,6 +63,22 @@ static void salva() {
         gtk_dialog_run(GTK_DIALOG(d));
         gtk_widget_destroy(d);
 }
+
+static void modifica() {
+   unsigned long lid=0L;
+   sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid);
+    sprintf(query, "UPDATE Fornitori SET nome='%s', indirizzo='%s', citta='%s', provincia='%s', email='%s', sitoweb='%s', note='%s', telefono='%s', fax='%s' WHERE idFornitore=%lu;", gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(indirizzo)), gtk_entry_get_text(GTK_ENTRY(citta)), gtk_entry_get_text(GTK_ENTRY(provincia)), gtk_entry_get_text(GTK_ENTRY(email)), gtk_entry_get_text(GTK_ENTRY(sitoWeb)), gtk_entry_get_text(GTK_ENTRY(note)), gtk_entry_get_text(GTK_ENTRY(telefono)), gtk_entry_get_text(GTK_ENTRY(fax)),lid);
+    mysql_real_query(conn, query, strlen(query));
+        mysql_real_query(conn, query, strlen(query));
+           errore=mysql_errno(conn);
+        if (errore==0)
+         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Operazione effettuata");
+	else
+	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Errore %d: %s", errore, mysql_error(conn));
+        gtk_dialog_run(GTK_DIALOG(d));
+        gtk_widget_destroy(d);
+}
+
 
 void creaFrameFornitore() {
 
@@ -111,9 +154,20 @@ void creaFrameFornitore() {
     gtk_box_pack_start(GTK_BOX(hbox), note, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
     hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-    bottone=gtk_button_new_with_label("Ok");
+    bottone=gtk_button_new_with_label("Salva");
     g_signal_connect(bottone, "clicked", G_CALLBACK(salva), NULL);
     gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
+
+    bottone=gtk_button_new_with_label("Carica");
+    g_signal_connect(bottone, "clicked", G_CALLBACK(carica), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
+
+
+    bottone=gtk_button_new_with_label("Modifica");
+    g_signal_connect(bottone, "clicked", G_CALLBACK(modifica), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
+
+
     bottone=gtk_button_new_with_label("Annulla");
     g_signal_connect(bottone, "clicked", G_CALLBACK(gtk_window_close), NULL);
     gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);

@@ -17,6 +17,53 @@ static char query[4096];
  
 extern MYSQL *conn;
 
+static void carica() {
+	MYSQL_RES *res;
+	MYSQL_ROW row;
+	unsigned long lid;
+	sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid);
+	sprintf(query, "SELECT quantita, prezzo, sconto, minimo, vendita, iddipendente, idnegozio, idarticolo FROM Oggetti where idOggetto=%lu", lid);
+	mysql_real_query(conn, query, strlen(query));
+	res=mysql_store_result(conn);
+	row=mysql_fetch_row(res);
+	 if (row==NULL) {
+               d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "L'articolo inserito non è stato trovato.");
+                gtk_dialog_run(GTK_DIALOG(d));
+                gtk_widget_destroy(d);
+                return;
+       }
+       gtk_entry_set_text(GTK_ENTRY(quantita), row[0]);
+       gtk_entry_set_text(GTK_ENTRY(prezzo), row[1]);
+       gtk_entry_set_text(GTK_ENTRY(sconto), row[2]);
+       gtk_entry_set_text(GTK_ENTRY(minimo), row[3]);
+       gtk_entry_set_text(GTK_ENTRY(vendita), row[4]);
+       gtk_entry_set_text(GTK_ENTRY(idDipendente), row[5]);
+       gtk_entry_set_text(GTK_ENTRY(idNegozio), row[6]);
+       gtk_entry_set_text(GTK_ENTRY(idArticolo), row[7]);
+       mysql_free_result(res);
+}
+
+static void aggiorna() {
+    unsigned long lid=0L, liddipendente=0L, lidnegozio=0L, lidarticolo=0L, lquantita=0L, lsconto=0L, lminimo=0L, lvendita=0L;
+    sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid);
+    sscanf(gtk_entry_get_text(GTK_ENTRY(idDipendente)),"%lu", &liddipendente);
+    sscanf(gtk_entry_get_text(GTK_ENTRY(idNegozio)),"%lu", &lidnegozio);
+    sscanf(gtk_entry_get_text(GTK_ENTRY(idArticolo)),"%lu", &lidarticolo);
+    sscanf(gtk_entry_get_text(GTK_ENTRY(quantita)),"%lu", &lquantita);
+    sscanf(gtk_entry_get_text(GTK_ENTRY(sconto)),"%lu", &lsconto);
+    sscanf(gtk_entry_get_text(GTK_ENTRY(minimo)),"%lu", &lminimo);
+    sscanf(gtk_entry_get_text(GTK_ENTRY(vendita)),"%lu", &lvendita);
+ sprintf(query, "UPDATE Oggetti set quantita=%lu, prezzo='%s', sconto=%lu, minimo=%lu, vendita=%lu, iddipendente=%lu, idnegozio=%lu, idarticolo=%lu WHERE idOggetto=%lu;", lquantita,gtk_entry_get_text(GTK_ENTRY(prezzo)),lsconto,lminimo,lvendita,liddipendente, lidnegozio, lidarticolo, lid);
+        mysql_real_query(conn, query, strlen(query));
+           errore=mysql_errno(conn);
+        if (errore==0)
+         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Operazione effettuata");
+	else
+	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Errore %d: %s", errore, mysql_error(conn));
+        gtk_dialog_run(GTK_DIALOG(d));
+        gtk_widget_destroy(d);
+}
+
 static void salva() {
     unsigned long lid=0L, liddipendente=0L, lidnegozio=0L, lidarticolo=0L, lquantita=0L, lsconto=0L, lminimo=0L, lvendita=0L;
     if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
@@ -163,11 +210,24 @@ void creaFrameOggetto() {
     gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
     
     hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-    bottone=gtk_button_new_with_label("Ok");
+    bottone=gtk_button_new_with_label("Salva");
     g_signal_connect(bottone, "clicked", G_CALLBACK(salva), NULL);
     gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
+
+    bottone=gtk_button_new_with_label("Carica");
+    g_signal_connect(bottone, "clicked", G_CALLBACK(carica), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
+
+
+    bottone=gtk_button_new_with_label("Aggiorna");
+    g_signal_connect(bottone, "clicked", G_CALLBACK(aggiorna), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
+    
     bottone=gtk_button_new_with_label("Annulla");
     g_signal_connect(bottone, "clicked", G_CALLBACK(gtk_window_close), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
+
+
     gtk_box_pack_start(GTK_BOX(hbox), bottone, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
     gtk_window_set_modal(finestra, TRUE);
