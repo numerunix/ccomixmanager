@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <mariadb/mysql.h>
+#include <libnotify/notify.h>
 
 static GtkWindow *finestra=NULL;
 static GtkWidget *id=NULL;
@@ -12,7 +13,7 @@ static GtkWidget *minimo=NULL;
 static GtkWidget *prezzo=NULL;
 static GtkWidget *vendita=NULL;
 static int errore;
-static GtkWidget *d=NULL;
+static NotifyNotification * d;
 static char query[4096];
  
 extern MYSQL *conn;
@@ -21,15 +22,20 @@ static void carica() {
 	MYSQL_RES *res;
 	MYSQL_ROW row;
 	unsigned long lid;
-	sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid);
+    if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
+	d = notify_notification_new ("Errore", "Il campo Id Oggetto non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+                return;
+    }
 	sprintf(query, "SELECT quantita, prezzo, sconto, minimo, vendita, iddipendente, idnegozio, idarticolo FROM Oggetti where idOggetto=%lu", lid);
 	mysql_real_query(conn, query, strlen(query));
 	res=mysql_store_result(conn);
 	row=mysql_fetch_row(res);
 	 if (row==NULL) {
-               d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "L'articolo inserito non è stato trovato.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
+               	d = notify_notification_new ("Errore", "L'articolo inserito non è stato trovato.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
                 return;
        }
        gtk_entry_set_text(GTK_ENTRY(quantita), row[0]);
@@ -45,73 +51,114 @@ static void carica() {
 
 static void aggiorna() {
     unsigned long lid=0L, liddipendente=0L, lidnegozio=0L, lidarticolo=0L, lquantita=0L, lsconto=0L, lminimo=0L, lvendita=0L;
-    sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid);
-    sscanf(gtk_entry_get_text(GTK_ENTRY(idDipendente)),"%lu", &liddipendente);
-    sscanf(gtk_entry_get_text(GTK_ENTRY(idNegozio)),"%lu", &lidnegozio);
-    sscanf(gtk_entry_get_text(GTK_ENTRY(idArticolo)),"%lu", &lidarticolo);
-    sscanf(gtk_entry_get_text(GTK_ENTRY(quantita)),"%lu", &lquantita);
-    sscanf(gtk_entry_get_text(GTK_ENTRY(sconto)),"%lu", &lsconto);
-    sscanf(gtk_entry_get_text(GTK_ENTRY(minimo)),"%lu", &lminimo);
-    sscanf(gtk_entry_get_text(GTK_ENTRY(vendita)),"%lu", &lvendita);
+    if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
+	d = notify_notification_new ("Errore", "Il campo Id Oggetto non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+                return;
+    }
+    if (sscanf(gtk_entry_get_text(GTK_ENTRY(idDipendente)),"%lu", &liddipendente) != 1) {
+	d = notify_notification_new ("Errore", "Il campo Id Dipendente non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+                return;
+   }
+   if (sscanf(gtk_entry_get_text(GTK_ENTRY(idNegozio)),"%lu", &lidnegozio) != 1) {
+	d = notify_notification_new ("Errore", "Il campo Id Negozio non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+                return;
+  }
+  if (sscanf(gtk_entry_get_text(GTK_ENTRY(idArticolo)),"%lu", &lidarticolo) != 1) {
+	d = notify_notification_new ("Errore", "Il campo Id Articolo non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+                return;
+ }
+ if (sscanf(gtk_entry_get_text(GTK_ENTRY(quantita)),"%lu", &lquantita) != 1) {
+	d = notify_notification_new ("Errore", "Il campo quantità non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+                return;
+ }
+ if (sscanf(gtk_entry_get_text(GTK_ENTRY(sconto)),"%lu", &lsconto) != 1) {
+	d = notify_notification_new ("Errore", "Il campo sconto non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+                return;
+ }
+ if (sscanf(gtk_entry_get_text(GTK_ENTRY(minimo)),"%lu", &lminimo) != 1) {
+	d = notify_notification_new ("Errore", "Il campo minimo vendibile non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+                return;
+ }
+ if (sscanf(gtk_entry_get_text(GTK_ENTRY(vendita)),"%lu", &lvendita) != 1) {
+	d = notify_notification_new ("Errore", "Il campo in vendita non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+                return;
+ }
+
  sprintf(query, "UPDATE Oggetti set quantita=%lu, prezzo='%s', sconto=%lu, minimo=%lu, vendita=%lu, iddipendente=%lu, idnegozio=%lu, idarticolo=%lu WHERE idOggetto=%lu;", lquantita,gtk_entry_get_text(GTK_ENTRY(prezzo)),lsconto,lminimo,lvendita,liddipendente, lidnegozio, lidarticolo, lid);
         mysql_real_query(conn, query, strlen(query));
            errore=mysql_errno(conn);
         if (errore==0)
-         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Operazione effettuata");
+               	d = notify_notification_new ("Esito positivo", "Operazione effettuata.", "dialog-information");
 	else
-	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Errore %d: %s", errore, mysql_error(conn));
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
+               	d = notify_notification_new ("Esito negativo", mysql_error(conn), "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
 }
 
 static void salva() {
     unsigned long lid=0L, liddipendente=0L, lidnegozio=0L, lidarticolo=0L, lquantita=0L, lsconto=0L, lminimo=0L, lvendita=0L;
     if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
-                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Collana non è intero.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore", "Il campo Id Oggetto non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
                 return;
     }
     if (sscanf(gtk_entry_get_text(GTK_ENTRY(idDipendente)),"%lu", &liddipendente) != 1) {
-                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Dipendente non è intero.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore", "Il campo Id Dipendente non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
                 return;
    }
    if (sscanf(gtk_entry_get_text(GTK_ENTRY(idNegozio)),"%lu", &lidnegozio) != 1) {
-                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Negozio non è intero.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore", "Il campo Id Negozio non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
                 return;
   }
   if (sscanf(gtk_entry_get_text(GTK_ENTRY(idArticolo)),"%lu", &lidarticolo) != 1) {
-                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Editore non è intero.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore", "Il campo Id Articolo non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
                 return;
  }
  if (sscanf(gtk_entry_get_text(GTK_ENTRY(quantita)),"%lu", &lquantita) != 1) {
-                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo Quantita non è intero.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore", "Il campo quantità non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
                 return;
  }
  if (sscanf(gtk_entry_get_text(GTK_ENTRY(sconto)),"%lu", &lsconto) != 1) {
-                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo sconto non è intero.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore", "Il campo sconto non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
                 return;
  }
  if (sscanf(gtk_entry_get_text(GTK_ENTRY(minimo)),"%lu", &lminimo) != 1) {
-                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo minimo non è intero.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore", "Il campo minimo vendibile non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
                 return;
  }
  if (sscanf(gtk_entry_get_text(GTK_ENTRY(vendita)),"%lu", &lvendita) != 1) {
-                d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo vendita non è intero.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore", "Il campo in vendita non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
                 return;
  }
 
@@ -119,11 +166,11 @@ static void salva() {
         mysql_real_query(conn, query, strlen(query));
            errore=mysql_errno(conn);
         if (errore==0)
-         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Operazione effettuata");
+		d = notify_notification_new ("Informazione", "L'inserimento è riuscito.", "dialog-information");
 	else
-	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Errore %d: %s", errore, mysql_error(conn));
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
+		d = notify_notification_new ("Errore", mysql_error(conn), "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
 }
 
 void creaFrameOggetto() {
@@ -188,7 +235,7 @@ void creaFrameOggetto() {
     hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 
     hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-    label=gtk_label_new("ID Dipedente: ");
+    label=gtk_label_new("ID Dipendente: ");
     gtk_box_pack_start(GTK_BOX(hbox), label, TRUE,TRUE, 0);
     idDipendente=gtk_entry_new();
     gtk_box_pack_start(GTK_BOX(hbox), idDipendente, TRUE, TRUE, 0);

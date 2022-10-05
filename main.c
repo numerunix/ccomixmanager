@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <mariadb/mysql.h>
+#include <libnotify/notify.h>
 #include "logo.xpm"
 
 extern void creaFrameConnessione();
@@ -20,6 +21,7 @@ extern void creaFrameOggetto();
 static void esci() {
 	if (conn!=NULL)
 		mysql_close(conn);
+	notify_uninit();
 	gtk_main_quit();
 }
 
@@ -110,7 +112,9 @@ int main (int argc, char *argv[])
 
   /* Enter the main loop */
   gtk_widget_show_all (win);
+  notify_init ("ccomixmanager");
   creaFrameConnessione();
   gtk_main ();
   return 0;
 }
+

@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <mariadb/mysql.h>
+#include <libnotify/notify.h>
 
 static GtkWindow *finestra=NULL;
 static GtkWidget *id=NULL;
@@ -8,7 +9,7 @@ static GtkWidget *note=NULL;
 static GtkWidget *idEditore=NULL;
 static char query[4096];
 static int errore;
-static GtkWidget *d=NULL;
+static NotifyNotification * d;
  
 extern MYSQL *conn;
 
@@ -16,15 +17,20 @@ static void carica() {
 	MYSQL_RES * res=NULL;
 	MYSQL_ROW row=NULL;
 	unsigned long lid=0L;
-        sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid);
+    if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
+                d = notify_notification_new ("Errore", "Il campo Id Collana non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+       return;
+   }
          sprintf(query, "SELECT nome, note, idEditore FROM Collana WHERE idCollana='%lu';",lid);
        mysql_real_query(conn, query, strlen(query));
        res=mysql_store_result(conn);
        row=mysql_fetch_row(res);
        if (row==NULL) {
-               d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "La categoria inserito non è stato trovato.");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
+            	d = notify_notification_new ("Errore", "L'articolo inserito non è stato trovato.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
                 return;
        }
        
@@ -36,45 +42,55 @@ static void carica() {
 
 static void modifica() {
 unsigned long lid=0L, lideditore=0L;
-        sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid);
-        sscanf(gtk_entry_get_text(GTK_ENTRY(idEditore)),"%lu", &lideditore);
+    if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
+                d = notify_notification_new ("Errore", "Il campo Id Collana non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+       return;
+   }
+   if (sscanf(gtk_entry_get_text(GTK_ENTRY(idEditore)),"%lu", &lideditore) != 1) {
+                d = notify_notification_new ("Errore", "Il campo Id Editore non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
+      return;
+   }
         
  	sprintf(query, "UPDATE Collana SET nome='%s', note='%s', idEditore=%lu WHERE idCollana=%lu;",gtk_entry_get_text(GTK_ENTRY(nome)),gtk_entry_get_text(GTK_ENTRY(note)), lideditore, lid);
         mysql_real_query(conn, query, strlen(query));
         errore=mysql_errno(conn);
         if (errore != 0)
-	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Errore %d: %s", errore, mysql_error(conn));
+         d = notify_notification_new ("Esito positivo", "Operazione effettuata.", "dialog-information");
 	else
-         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Operazione effettuata");
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
+         d = notify_notification_new ("Esito positivo", "Operazione effettuata.", "dialog-information");
+ 	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
  
 }
 
 static void salva() {
     unsigned long lid=0L, lideditore=0L;
     if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lid) != 1) {
-       d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Collana non è intero.");
-       gtk_dialog_run(GTK_DIALOG(d));
-       gtk_widget_destroy(d);
+                d = notify_notification_new ("Errore", "Il campo Id Collana non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
        return;
    }
-   if (sscanf(gtk_entry_get_text(GTK_ENTRY(id)),"%lu", &lideditore) != 1) {
-      d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo ID Editore non è intero.");
-      gtk_dialog_run(GTK_DIALOG(d));
-      gtk_widget_destroy(d);
+   if (sscanf(gtk_entry_get_text(GTK_ENTRY(idEditore)),"%lu", &lideditore) != 1) {
+                d = notify_notification_new ("Errore", "Il campo Id Editore non è intero.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
       return;
    }
    
- 	sprintf(query, "INSERT INTO Collana(idCollana, nome, note, idEditore) VALUES(%lu, '%s', '%s', '%lu');",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(note)), lideditore);
+ 	sprintf(query, "INSERT INTO Collana(idCollana, nome, note, idEditore) VALUES(%lu, '%s', '%s', %lu);",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(note)), lideditore);
         mysql_real_query(conn, query, strlen(query));
         errore=mysql_errno(conn);
         if (errore==0)
-         d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Operazione effettuata");
+         d = notify_notification_new ("Informazione", "L'inserimento è riuscito.", "dialog-information");
 	else
-	   d=gtk_message_dialog_new(GTK_WINDOW(finestra), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Errore %d: %s", errore, mysql_error(conn));
-        gtk_dialog_run(GTK_DIALOG(d));
-        gtk_widget_destroy(d);
+		d = notify_notification_new ("Errore", mysql_error(conn), "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));;
 }
 
 void creaFrameCollana() {

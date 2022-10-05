@@ -1,50 +1,47 @@
 #include <gtk/gtk.h>
 #include <mariadb/mysql.h>
+#include <libnotify/notify.h>
 
 static GtkWidget *win = NULL;
 static GtkWidget *textbox=NULL;
 static GtkWidget *password=NULL;
 static GtkWidget *ip=NULL;
-
+extern GtkApplication *app;
 extern MYSQL *conn;
+NotifyNotification * d;
 
 static void connetti() {
-    GtkWidget *d;
     if (gtk_entry_get_text_length(GTK_ENTRY(textbox))>0 && gtk_entry_get_text_length(GTK_ENTRY(password))>0 && gtk_entry_get_text_length(GTK_ENTRY(ip))>0) {
         conn=mysql_init(NULL);
         if (conn==NULL) {
-            d=gtk_message_dialog_new(GTK_WINDOW(win), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Impossibile effettuare l'init del database");
-            gtk_dialog_run(GTK_DIALOG(d));
-            gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore nella connessione", "Impossibile effettuare la connessione: controllare la connessione.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
         }
-        else {
-            if ( (mysql_real_connect(conn,gtk_entry_get_text(GTK_ENTRY(ip)),gtk_entry_get_text(GTK_ENTRY(textbox)),gtk_entry_get_text(GTK_ENTRY(password)),"",0,NULL,0))== NULL) {
-                d=gtk_message_dialog_new(GTK_WINDOW(win), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Impossibile effettuare la connnessione");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
+        else{ if((mysql_real_connect(conn,gtk_entry_get_text(GTK_ENTRY(ip)),gtk_entry_get_text(GTK_ENTRY(textbox)),gtk_entry_get_text(GTK_ENTRY(password)),"",0,NULL,0))== NULL) {
+	d = notify_notification_new ("Impossibile effettuare la connessione", "Errore nella connessione controllare user e password.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
             }
             else {
                 mysql_select_db(conn, "ComixManager");
-                d=gtk_message_dialog_new(GTK_WINDOW(win), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "Connessione effettuata");
-                gtk_dialog_run(GTK_DIALOG(d));
-                gtk_widget_destroy(d);
-                gtk_window_close(GTK_WINDOW(win));
+		gtk_window_close(GTK_WINDOW(win));
             }
         }
 
     } else {
         if (gtk_entry_get_text_length(GTK_ENTRY(textbox))==0) {
-            d=gtk_message_dialog_new(GTK_WINDOW(win), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo user name non può essere NULL");
-            gtk_dialog_run(GTK_DIALOG(d));
-            gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore", "Il campo username non può essere NULL", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
         } else if (gtk_entry_get_text_length(GTK_ENTRY(ip))==0){
-            d=gtk_message_dialog_new(GTK_WINDOW(win), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo IP del server non può essere NULL");
-            gtk_dialog_run(GTK_DIALOG(d));
-            gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore", "Il campo ip del server non può essere null.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
         } else {
-            d=gtk_message_dialog_new(GTK_WINDOW(win), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Il campo password non può essere NULL");
-            gtk_dialog_run(GTK_DIALOG(d));
-            gtk_widget_destroy(d);
+	d = notify_notification_new ("Errore", "Il campo password non può essere null.", "dialog-error");
+	notify_notification_show (d, NULL);
+	g_object_unref(G_OBJECT(d));
         }
     }
 }
