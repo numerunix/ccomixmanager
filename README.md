@@ -1,34 +1,7 @@
 # ccomixmanager
-Questo vuole essere un proof of concept e probabilmente non verrà mai finito. Vuole dimostrare che meson si basa su pkg-config e snap ha il plugin per meson, quindi dovunque vada pkg-config può andare anche snap.
-
-Per installarlo è necessario avere le librerie gtk e le librerie mariadb da apt, non da snap-store.
-
-E' necessario prendere il database dal mio progetto comixmanager su github e ripristinare il backup (https://github.com/numerunix/ComixManager/tree/master/Dump20190226).
-
-Attualmente sono pesenti solo 3 form di inserimento: editore, fornitore e negozio.
-
-# Installazione
-# Debian
-sudo add-apt-repository "http://numeronesoft.ddns.net/repos/apt/debian bullseye main"
-
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 9D4AE50D
-
-sudo apt install ccomixmanager
-
-# The OLD FASCION DEBIAN WAY
-Per installare i package Deb disponibili nella sezione release, bisogna usare dpkg passando come parametro i e i nomi dei files da installare.
-Verosimilmente
-
-# cd Scaricati
-
-# sudo dpkg -i *.deb
-
-A questo punto bisogna scaricare le librerie wxwidgets necessarie per l'esecuzione
-
-# sudo apt -f install
-
-I package sono universali e vanno bene sia per Ubuntu che per debian.
-Sentitevi liberi di incorporarli nei vostri server apt, a patto di mantenere integro il binario, come prevede la licenza GPL.
+Questo vuole essere un grido d'aiuto: dovevo fare un gestionale in java, ma il committente si è detto contrario al free software e mi ha scaricato.
+Per cui questo software al momento vuole essere un indicizzatore di elementi, ma è pronto a diventare un gestionale se trovo il committente.
+Per il momento scaricatelo da snap su ubuntu per provarlo, e ricordatevi di usare mariadb come database, preimpostandolo col dump che trovate in questo repository
 
 [![Scarica dallo Snap Store](https://snapcraft.io/static/images/badges/it/snap-store-black.svg)](https://snapcraft.io/ccomixmanager)
 
