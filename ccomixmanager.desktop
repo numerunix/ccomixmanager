@@ -4,5 +4,6 @@ Type=Application
 Name=ccomixmanager
 Comment=Primo gestionale per snap in C e GTK
 Exec=/usr/bin/ccomixmanager
+Icon=/usr/share/icons/ccomixmanager.png
 Actions=
 Categories=Office;
