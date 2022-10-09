@@ -1,0 +1,5 @@
+ccomixmanager (0.3-1) unstable; urgency=medium
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Giulio Sorrentino <numerone@unknown>  Sun, 09 Oct 2022 08:26:38 +0200
