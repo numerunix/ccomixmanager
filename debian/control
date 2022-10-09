@@ -1,0 +1,16 @@
+Source: ccomixmanager
+Section: unknown
+Priority: optional
+Maintainer: Giulio Sorrentino <numerone@unknown>
+Build-Depends: debhelper-compat (= 13), libgtk-3-dev, libmariadb-dev, libnotify-dev
+Standards-Version: 4.5.1
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Browser: https://salsa.debian.org/debian/ccomixmanager
+#Vcs-Git: https://salsa.debian.org/debian/ccomixmanager.git
+Rules-Requires-Root: no
+
+Package: ccomixmanager
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, libnotify4
+Description: Un indicizzatore in gtk e mariadb
+ Un indicizzatore in gtk e mariadb che vuol diventare un gestionale
