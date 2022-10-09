@@ -5,6 +5,14 @@ Per il momento scaricatelo da snap su ubuntu per provarlo, e ricordatevi di usar
 
 [![Scarica dallo Snap Store](https://snapcraft.io/static/images/badges/it/snap-store-black.svg)](https://snapcraft.io/ccomixmanager)
 
+# Installazione
+
+Installate la nuova chiave del repository tramite il comando sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 14A92445BD7CCE82
+
+Poi inserite nel file /etc/apt/sources.list la riga deb http://numeronesoft.ddns.net/repos/apt/debian bullseye main
+
+Infine fate apt update ed apt install wxbriscola
+
 # Donazioni
 
 [![paypal](https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H4ZHTFRCETWXG)
