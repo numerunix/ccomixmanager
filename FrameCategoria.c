@@ -22,7 +22,7 @@ static void carica() {
 	g_object_unref(G_OBJECT(d));
                 return;
     }
-         sprintf(query, "SELECT nome, note FROM Categoria WHERE idCategoria='%lu';",lid);
+         sprintf(query, "SELECT nome, note FROM Categorie WHERE idCategoria='%lu';",lid);
        mysql_real_query(conn, query, strlen(query));
        res=mysql_store_result(conn);
        row=mysql_fetch_row(res);
@@ -47,7 +47,7 @@ unsigned long lid=0L;
                 return;
     }
         
- 	sprintf(query, "UPDATE Categoria SET nome='%s', note='%s' WHERE idCategoria=%lu;",gtk_entry_get_text(GTK_ENTRY(nome)),gtk_entry_get_text(GTK_ENTRY(note)), lid);
+ 	sprintf(query, "UPDATE Categorie SET nome='%s', note='%s' WHERE idCategoria=%lu;",gtk_entry_get_text(GTK_ENTRY(nome)),gtk_entry_get_text(GTK_ENTRY(note)), lid);
         mysql_real_query(conn, query, strlen(query));
         errore=mysql_errno(conn);
         if (errore != 0)
@@ -68,9 +68,11 @@ static void salva() {
                 return;
     }
 
- 	sprintf(query, "INSERT INTO Categoria(idCategoria, nome, note) VALUES(%lu, '%s', '%s');",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(note)));
-        mysql_real_query(conn, query, strlen(query));
-        if (errore==0)
+ 	sprintf(query, "INSERT INTO Categorie(idCategoria, nome, note) VALUES(%lu, '%s', '%s');",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(note)));
+        printf("%s", query);
+	mysql_real_query(conn, query, strlen(query));
+        errore=mysql_errno(conn);
+	if (errore==0)
          d = notify_notification_new ("Informazione", "L'inserimento è riuscito.", "dialog-information");
 	else
 		d = notify_notification_new ("Errore", mysql_error(conn), "dialog-error");

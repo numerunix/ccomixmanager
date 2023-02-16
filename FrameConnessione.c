@@ -24,7 +24,7 @@ static void connetti() {
 	g_object_unref(G_OBJECT(d));
             }
             else {
-                mysql_select_db(conn, "ComixManager");
+                mysql_select_db(conn, "comixmanager");
 		gtk_window_close(GTK_WINDOW(win));
             }
         }

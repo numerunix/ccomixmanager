@@ -23,7 +23,7 @@ static void carica() {
 	g_object_unref(G_OBJECT(d));
        return;
    }
-         sprintf(query, "SELECT nome, note, idEditore FROM Collana WHERE idCollana='%lu';",lid);
+         sprintf(query, "SELECT nome, note, idEditore FROM Collane WHERE idCollana='%lu';",lid);
        mysql_real_query(conn, query, strlen(query));
        res=mysql_store_result(conn);
        row=mysql_fetch_row(res);
@@ -55,7 +55,7 @@ unsigned long lid=0L, lideditore=0L;
       return;
    }
         
- 	sprintf(query, "UPDATE Collana SET nome='%s', note='%s', idEditore=%lu WHERE idCollana=%lu;",gtk_entry_get_text(GTK_ENTRY(nome)),gtk_entry_get_text(GTK_ENTRY(note)), lideditore, lid);
+ 	sprintf(query, "UPDATE Collane SET nome='%s', note='%s', idEditore=%lu WHERE idCollana=%lu;",gtk_entry_get_text(GTK_ENTRY(nome)),gtk_entry_get_text(GTK_ENTRY(note)), lideditore, lid);
         mysql_real_query(conn, query, strlen(query));
         errore=mysql_errno(conn);
         if (errore != 0)
@@ -82,7 +82,7 @@ static void salva() {
       return;
    }
    
- 	sprintf(query, "INSERT INTO Collana(idCollana, nome, note, idEditore) VALUES(%lu, '%s', '%s', %lu);",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(note)), lideditore);
+ 	sprintf(query, "INSERT INTO Collane(idCollana, nome, note, idEditore) VALUES(%lu, '%s', '%s', %lu);",lid, gtk_entry_get_text(GTK_ENTRY(nome)), gtk_entry_get_text(GTK_ENTRY(note)), lideditore);
         mysql_real_query(conn, query, strlen(query));
         errore=mysql_errno(conn);
         if (errore==0)
