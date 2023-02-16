@@ -24,8 +24,12 @@ static void connetti() {
 	g_object_unref(G_OBJECT(d));
             }
             else {
-                mysql_select_db(conn, "comixmanager");
-		gtk_window_close(GTK_WINDOW(win));
+                mysql_select_db(conn, "ComixManager");
+                if (mysql_errno(conn)!=0) {
+			d = notify_notification_new ("Errore", "Impossibile selezionare il database.", "dialog-error");
+			notify_notification_show (d, NULL);
+			g_object_unref(G_OBJECT(d));
+		}		gtk_window_close(GTK_WINDOW(win));
             }
         }
 
