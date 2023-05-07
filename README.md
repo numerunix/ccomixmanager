@@ -3,9 +3,13 @@ Questo vuole essere un grido d'aiuto: dovevo fare un gestionale in java, ma il c
 Per cui questo software al momento vuole essere un indicizzatore di elementi, ma è pronto a diventare un gestionale se trovo il committente.
 Per il momento scaricatelo da snap su ubuntu per provarlo, e ricordatevi di usare mariadb come database, preimpostandolo col dump che trovate in questo repository
 
-[![Scarica dallo Snap Store](https://snapcraft.io/static/images/badges/it/snap-store-black.svg)](https://snapcraft.io/ccomixmanager)
 
 # Installazione
+# Ubuntu
+
+[![Scarica dallo Snap Store](https://snapcraft.io/static/images/badges/it/snap-store-black.svg)](https://snapcraft.io/ccomixmanager)
+[![youtube](https://i.ibb.co/WGHkfTF/a.png)](https://www.youtube.com/watch?v=kEEjx6OYFpo)
+# Debian
 
 Installate la nuova chiave del repository tramite il comando sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 52B68EEB
 
